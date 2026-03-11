@@ -1,0 +1,342 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Atel Platform Technical Notes</title><style>
+body{font-family:Inter,system-ui,-apple-system,sans-serif;max-width:980px;margin:40px auto;padding:0 20px;line-height:1.6;color:#111;background:#fafafa}
+a{color:#0b57d0;text-decoration:none} a:hover{text-decoration:underline}
+.card{background:white;border:1px solid #e5e7eb;border-radius:16px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.03)}
+pre{white-space:pre-wrap;word-break:break-word;background:#f6f8fa;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f4f6;padding:2px 6px;border-radius:6px}
+ul{padding-left:22px} li{margin:8px 0}.muted{color:#666}.top{margin-bottom:20px}
+</style></head><body><div class="top"><a href="../index.html">← Back to index</a></div><div class="card"><h1>Atel Platform Technical Notes</h1><p class="muted"><a href="./reports/atel-platform-technical-notes.md">Download raw markdown</a></p><div class="markdown-heading"><h1 class="heading-element">Atel Platform Backend Technical Notes (Executive Review)</h1><a id="user-content-atel-platform-backend-technical-notes-executive-review" class="anchor" aria-label="Permalink: Atel Platform Backend Technical Notes (Executive Review)" href="#atel-platform-backend-technical-notes-executive-review"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h2 class="heading-element">1) Executive summary</h2><a id="user-content-1-executive-summary" class="anchor" aria-label="Permalink: 1) Executive summary" href="#1-executive-summary"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>This repository is a serious attempt to turn ATEL from a registry (“yellow pages”) into a transaction-capable agent platform (identity, escrow, certification, promotion, disputes, and multi-chain payments) in Go.</p>
+<p><strong>Bottom line:</strong> the strategic direction is strong, and there is meaningful product/platform potential. However, the current codebase appears to be <strong>pre-hardening</strong> with several <strong>critical production blockers</strong> (schema/runtime mismatches, auth/privacy gaps, and operational weaknesses) that should be addressed before scaling.</p>
+<p><strong>Executive verdict:</strong> <strong>Invest + harden</strong> (not rewrite). The architecture and business primitives are worth building on, but production readiness is not yet at enterprise grade.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">2) What this repo appears to be / product role in the broader Atel stack</h2><a id="user-content-2-what-this-repo-appears-to-be--product-role-in-the-broader-atel-stack" class="anchor" aria-label="Permalink: 2) What this repo appears to be / product role in the broader Atel stack" href="#2-what-this-repo-appears-to-be--product-role-in-the-broader-atel-stack"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>From <code>docs/architecture-design.md</code> and the Go implementation, this repo is intended to be the <strong>core commercial backend</strong> of Atel:</p>
+<ul>
+<li>Registry/discovery for agents</li>
+<li>Trade/order lifecycle with escrow and settlement</li>
+<li>Certification and paid boosting</li>
+<li>Dispute workflows</li>
+<li>Payment rails (manual + Stripe + Alipay + crypto USDC on Solana/Base/BSC)</li>
+<li>Relay messaging layer for agent notifications</li>
+</ul>
+<p>Key control-plane entrypoint is <code>cmd/server/main.go</code>, with domain modules in <code>internal/*</code>.</p>
+<p>In the broader stack, this backend is the likely <strong>system of record</strong> for trust, money flows, and dispute history — i.e., the platform’s economic and governance core.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">3) Backend/platform architecture and subsystem breakdown</h2><a id="user-content-3-backendplatform-architecture-and-subsystem-breakdown" class="anchor" aria-label="Permalink: 3) Backend/platform architecture and subsystem breakdown" href="#3-backendplatform-architecture-and-subsystem-breakdown"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Runtime structure</h3><a id="user-content-runtime-structure" class="anchor" aria-label="Permalink: Runtime structure" href="#runtime-structure"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Monolithic API server (<code>Gin</code>) in <code>cmd/server/main.go</code>
+</li>
+<li>PostgreSQL persistence (<code>internal/db/*</code>)</li>
+<li>Modular domain packages:
+<ul>
+<li><code>internal/registry</code></li>
+<li><code>internal/trade</code></li>
+<li><code>internal/payment</code></li>
+<li><code>internal/cert</code></li>
+<li><code>internal/boost</code></li>
+<li><code>internal/dispute</code></li>
+<li><code>internal/relay</code></li>
+<li>
+<code>internal/auth</code>, <code>internal/middleware</code>
+</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Notable architecture characteristics</h3><a id="user-content-notable-architecture-characteristics" class="anchor" aria-label="Permalink: Notable architecture characteristics" href="#notable-architecture-characteristics"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>DID-signed request model (<code>internal/auth/did.go</code>, <code>internal/middleware/auth.go</code>)</li>
+<li>Admin JWT model (<code>internal/auth/jwt.go</code>)</li>
+<li>Background jobs in-process (auto-confirm, cert expiry, deposit verification, sweep, offline marking) in <code>main.go</code>
+</li>
+<li>Multi-chain USDC infrastructure (deposit address derivation, verification, sweep logic) in <code>internal/payment/*</code>
+</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Codebase size and concentration</h3><a id="user-content-codebase-size-and-concentration" class="anchor" aria-label="Permalink: Codebase size and concentration" href="#codebase-size-and-concentration"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>~29 Go files, ~7.6k LOC</li>
+<li>Highest complexity concentration in payments (<code>internal/payment</code>: ~2.5k LOC)</li>
+<li>Trade module is next largest (~1.9k LOC)</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Critical architectural mismatch discovered</h3><a id="user-content-critical-architectural-mismatch-discovered" class="anchor" aria-label="Permalink: Critical architectural mismatch discovered" href="#critical-architectural-mismatch-discovered"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>There are major runtime schema mismatches:</p>
+<ul>
+<li>
+<code>agents.online</code> is used across registry and background jobs (<code>internal/registry/*</code>, <code>main.go</code>) but <strong>not created in DB migrations</strong> (<code>internal/db/migrations.go</code>)</li>
+<li>
+<code>offers</code> table is heavily used (<code>internal/trade/offer.go</code>) but <strong>no migration creates it</strong>
+</li>
+</ul>
+<p>These are potential immediate runtime failures in clean environments.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">4) Engineering strengths</h2><a id="user-content-4-engineering-strengths" class="anchor" aria-label="Permalink: 4) Engineering strengths" href="#4-engineering-strengths"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<strong>Clear modular decomposition</strong> for core business domains.</li>
+<li>
+<strong>Strong product-centric primitives already encoded</strong>:
+<ul>
+<li>Escrow + settlement (<code>internal/trade/helpers.go</code>)</li>
+<li>Dispute handling (<code>internal/dispute/*</code>)</li>
+<li>Cert/boost monetization (<code>internal/cert</code>, <code>internal/boost</code>)</li>
+</ul>
+</li>
+<li>
+<strong>Practical cryptographic identity integration</strong>:
+<ul>
+<li>DID parsing + signature verification (<code>internal/auth/did.go</code>)</li>
+</ul>
+</li>
+<li>
+<strong>Thoughtful payment ambition</strong>:
+<ul>
+<li>Multi-gateway abstraction (<code>internal/payment/gateway.go</code>)</li>
+<li>Deterministic per-user deposit addressing (<code>internal/payment/deposit_addresses.go</code>, <code>derivation.go</code>)</li>
+<li>Sweep operations to treasury (<code>internal/payment/sweep.go</code>)</li>
+</ul>
+</li>
+<li>
+<strong>Use of DB transactions</strong> in many high-stakes flows (settlement, dispute resolution, certification purchase, deposit confirmation).</li>
+</ol>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">5) Engineering weaknesses / technical debt</h2><a id="user-content-5-engineering-weaknesses--technical-debt" class="anchor" aria-label="Permalink: 5) Engineering weaknesses / technical debt" href="#5-engineering-weaknesses--technical-debt"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<strong>Schema drift / migration incompleteness</strong> (high severity):
+<ul>
+<li>Missing <code>online</code> column in <code>agents</code>
+</li>
+<li>Missing <code>offers</code> table migration</li>
+</ul>
+</li>
+<li>
+<strong>Monolithic main and heavy package concentration</strong>:
+<ul>
+<li>
+<code>cmd/server/main.go</code> is very large and owns too much orchestration.</li>
+</ul>
+</li>
+<li>
+<strong>Financial arithmetic uses float (<code>REAL</code>, <code>float64</code>)</strong> instead of fixed-point/decimal across orders/payments/accounts.</li>
+<li>
+<strong>Error handling inconsistency</strong>:
+<ul>
+<li>Some critical DB operations ignore returned errors.</li>
+</ul>
+</li>
+<li>
+<strong>Feature/documentation drift</strong>:
+<ul>
+<li>Architecture doc is more complete than implemented production-grade behavior (e.g., analytics/ops/compliance maturity).</li>
+</ul>
+</li>
+<li>
+<strong>Binary artifacts committed in repo</strong> (<code>atel-platform-new</code>, <code>server-static</code>) reduce build transparency and supply-chain hygiene.</li>
+</ol>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">6) Code quality and maintainability assessment</h2><a id="user-content-6-code-quality-and-maintainability-assessment" class="anchor" aria-label="Permalink: 6) Code quality and maintainability assessment" href="#6-code-quality-and-maintainability-assessment"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p><strong>Overall assessment: Medium (promising but uneven).</strong></p>
+<ul>
+<li>Positive:
+<ul>
+<li>Domain boundaries are understandable.</li>
+<li>Naming and package structure are generally coherent.</li>
+</ul>
+</li>
+<li>Negative:
+<ul>
+<li>Inconsistent rigor: some flows are transactional and careful, others are permissive or partially validated.</li>
+<li>Very large files (notably payment gateway) increase change risk and onboarding complexity.</li>
+<li>Limited automated tests for high-risk flows.</li>
+</ul>
+</li>
+</ul>
+<p>A maintainability concern is that the payment subsystem (<code>internal/payment/gateway.go</code>) combines multiple responsibilities (gateway abstraction, chain RPC handling, signing/building tx payloads, registry utilities), making regression risk high.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">7) Security / auth / payments / trust / operational risk observations</h2><a id="user-content-7-security--auth--payments--trust--operational-risk-observations" class="anchor" aria-label="Permalink: 7) Security / auth / payments / trust / operational risk observations" href="#7-security--auth--payments--trust--operational-risk-observations"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">High-risk observations</h3><a id="user-content-high-risk-observations" class="anchor" aria-label="Permalink: High-risk observations" href="#high-risk-observations"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<strong>Relay endpoints appear unauthenticated</strong> (<code>internal/relay/handler.go</code>): send/poll/respond flows do not use DID auth.</li>
+<li>
+<strong>Potential notify-path mismatch</strong>: trade notifications post to <code>http://127.0.0.1:9000/relay/v1/send/:did</code> (<code>internal/trade/handler.go</code>), while relay route is <code>/relay/v1/send</code> with JSON target. This likely breaks reliable delivery.</li>
+<li>
+<strong>Default JWT secret fallback</strong> (<code>internal/config/config.go</code>, <code>main.go</code> warns but still supports default) creates token forgery risk if misconfigured.</li>
+<li>
+<strong>Open CORS policy</strong> (<code>main.go</code>) with permissive origin/method/header policy.</li>
+<li>
+<strong>DID replay window without nonce store</strong>: timestamp checks exist, but replay within allowed window is possible.</li>
+</ol>
+<div class="markdown-heading"><h3 class="heading-element">Payment/trust model risks</h3><a id="user-content-paymenttrust-model-risks" class="anchor" aria-label="Permalink: Payment/trust model risks" href="#paymenttrust-model-risks"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<strong>Money precision risk</strong> (float-based ledger).</li>
+<li>
+<strong>Trust score self-update</strong> endpoint (<code>/registry/v1/score/update</code>) allows self-reported trust changes, which can affect downstream controls.</li>
+<li>
+<strong>Ledger consistency gaps</strong>:
+<ul>
+<li>Boost purchase deducts user funds but does not clearly credit platform account in same transaction (<code>internal/boost/handler.go</code>).</li>
+<li>Some dispute resolution branches deduct fee from payout without explicit platform fee credit (<code>internal/dispute/handler.go</code>).</li>
+</ul>
+</li>
+</ol>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">8) Testing and verification maturity</h2><a id="user-content-8-testing-and-verification-maturity" class="anchor" aria-label="Permalink: 8) Testing and verification maturity" href="#8-testing-and-verification-maturity"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>Test footprint is light:</p>
+<ul>
+<li><code>internal/auth/did_test.go</code></li>
+<li><code>internal/trade/trade_test.go</code></li>
+<li><code>internal/payment/payment_test.go</code></li>
+</ul>
+<p>Coverage appears focused on helper logic (serialization, commission rates, utility functions), not end-to-end transactional safety.</p>
+<p>I could not run <code>go test ./...</code> in this environment because Go toolchain is not installed (<code>go</code> command unavailable), so runtime test status is unverified here.</p>
+<p><strong>Maturity rating: low-to-medium for a financial/trust platform.</strong></p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">9) Operational readiness / deployability / observability</h2><a id="user-content-9-operational-readiness--deployability--observability" class="anchor" aria-label="Permalink: 9) Operational readiness / deployability / observability" href="#9-operational-readiness--deployability--observability"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Positive</h3><a id="user-content-positive" class="anchor" aria-label="Permalink: Positive" href="#positive"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Single binary deployment model is straightforward.</li>
+<li>Health endpoint exists (<code>/health</code>).</li>
+<li>In-process scheduled maintenance loops are present.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Gaps</h3><a id="user-content-gaps" class="anchor" aria-label="Permalink: Gaps" href="#gaps"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>No clear CI/CD, infra manifests, or deployment playbooks in repo root.</li>
+<li>No formal migration versioning framework; migrations are hardcoded SQL list in app startup.</li>
+<li>Minimal observability (no metrics/tracing stack, limited structured logging).</li>
+<li>In-process background jobs can complicate horizontal scaling behavior.</li>
+</ul>
+<p><strong>Readiness: suitable for controlled pilot; not yet enterprise-ops mature.</strong></p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">10) Scalability and extensibility</h2><a id="user-content-10-scalability-and-extensibility" class="anchor" aria-label="Permalink: 10) Scalability and extensibility" href="#10-scalability-and-extensibility"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Scalability</h3><a id="user-content-scalability" class="anchor" aria-label="Permalink: Scalability" href="#scalability"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Go + PostgreSQL baseline can scale well for early/mid-stage volumes.</li>
+<li>Modular package layout supports functional expansion.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Limits / future constraints</h3><a id="user-content-limits--future-constraints" class="anchor" aria-label="Permalink: Limits / future constraints" href="#limits--future-constraints"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Payment and trade logic are DB-centric and synchronous; high-throughput scenarios may require queue/event architecture.</li>
+<li>Missing Redis usage despite config hooks suggests caching/async strategy is not mature.</li>
+<li>In-process job loops and shared DB writes require careful coordination when moving to multi-instance deployment.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Extensibility</h3><a id="user-content-extensibility" class="anchor" aria-label="Permalink: Extensibility" href="#extensibility"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Gateway abstraction and route modularity are good signs.</li>
+<li>Current schema/migration discipline needs strengthening to support safe expansion.</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">11) Key risks (technical + platformization)</h2><a id="user-content-11-key-risks-technical--platformization" class="anchor" aria-label="Permalink: 11) Key risks (technical + platformization)" href="#11-key-risks-technical--platformization"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<strong>Production break risk from schema drift</strong> (online/offers migration gaps).</li>
+<li>
+<strong>Trust and dispute legitimacy risk</strong> if security and relay auth remain weak.</li>
+<li>
+<strong>Financial integrity risk</strong> due to float ledgers and inconsistent platform-fee accounting paths.</li>
+<li>
+<strong>Platform reputation risk</strong> if notification reliability is broken and order/dispute states desynchronize.</li>
+<li>
+<strong>Scale-out risk</strong> from limited observability and mixed operational patterns.</li>
+</ol>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">12) Strategic upside / moat potential from the codebase itself</h2><a id="user-content-12-strategic-upside--moat-potential-from-the-codebase-itself" class="anchor" aria-label="Permalink: 12) Strategic upside / moat potential from the codebase itself" href="#12-strategic-upside--moat-potential-from-the-codebase-itself"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>If hardened, this codebase can support a differentiated moat via:</p>
+<ul>
+<li>
+<strong>Identity + execution evidence + settlement + disputes</strong> in one platform data plane.</li>
+<li>
+<strong>Cross-chain USDC rails</strong> integrated directly into platform workflows.</li>
+<li>
+<strong>Compounding marketplace data</strong> (transaction history, ratings, dispute outcomes, cert status) that improves matchmaking and trust over time.</li>
+</ul>
+<p>The moat is not raw code novelty alone — it is the <strong>institutional data + decision history + reliable economic rails</strong> this backend can accumulate.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">13) Recommendation (with rationale)</h2><a id="user-content-13-recommendation-with-rationale" class="anchor" aria-label="Permalink: 13) Recommendation (with rationale)" href="#13-recommendation-with-rationale"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h2 class="heading-element">Recommendation: <strong>Invest and harden (do not rewrite)</strong>
+</h2><a id="user-content-recommendation-invest-and-harden-do-not-rewrite" class="anchor" aria-label="Permalink: Recommendation: Invest and harden (do not rewrite)" href="#recommendation-invest-and-harden-do-not-rewrite"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>The core architecture is directionally correct and already implements meaningful platform economics. A rewrite would likely burn time and lose momentum.</p>
+<div class="markdown-heading"><h3 class="heading-element">Proposed execution plan</h3><a id="user-content-proposed-execution-plan" class="anchor" aria-label="Permalink: Proposed execution plan" href="#proposed-execution-plan"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<strong>Immediate hardening sprint (blocking issues first)</strong>
+<ul>
+<li>Fix migration gaps (<code>online</code>, <code>offers</code>, any missing indexes)</li>
+<li>Lock down relay auth and sensitive public endpoints</li>
+<li>Enforce non-default secrets and safer config boot checks</li>
+</ul>
+</li>
+<li>
+<strong>Financial correctness sprint</strong>
+<ul>
+<li>Move all money math to integer minor units or decimal library</li>
+<li>Reconcile all fee paths and ledger invariants</li>
+</ul>
+</li>
+<li>
+<strong>Operational maturity sprint</strong>
+<ul>
+<li>Add metrics, structured logs, migration/version process, and deployment runbooks</li>
+<li>Add integration tests for order/payment/dispute flows</li>
+</ul>
+</li>
+<li>
+<strong>Then pilot under controlled load</strong>
+<ul>
+<li>Limited tenant/region rollout with tight reconciliation and incident thresholds</li>
+</ul>
+</li>
+</ol>
+<p>This path captures upside while controlling downside.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">14) Executive bullets: pros, cons, strengths, weaknesses</h2><a id="user-content-14-executive-bullets-pros-cons-strengths-weaknesses" class="anchor" aria-label="Permalink: 14) Executive bullets: pros, cons, strengths, weaknesses" href="#14-executive-bullets-pros-cons-strengths-weaknesses"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Pros</h3><a id="user-content-pros" class="anchor" aria-label="Permalink: Pros" href="#pros"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Strong strategic architecture for a monetized agent platform</li>
+<li>Core commercial primitives already implemented</li>
+<li>Multi-chain payment ambition is real, not superficial</li>
+<li>Modular backend structure allows targeted hardening</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Cons</h3><a id="user-content-cons" class="anchor" aria-label="Permalink: Cons" href="#cons"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Not production-safe yet for high-trust financial operations</li>
+<li>Security/auth/privacy controls are inconsistent</li>
+<li>Schema/runtime drift indicates release engineering immaturity</li>
+<li>Limited testing for critical money/trust workflows</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Strengths</h3><a id="user-content-strengths" class="anchor" aria-label="Permalink: Strengths" href="#strengths"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Business model encoded in software (escrow, cert, boost, disputes)</li>
+<li>DID-based identity foundation</li>
+<li>Reasonable transaction-centric approach in important paths</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Weaknesses</h3><a id="user-content-weaknesses" class="anchor" aria-label="Permalink: Weaknesses" href="#weaknesses"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Migration discipline and operational rigor lag product ambition</li>
+<li>Payment subsystem complexity concentrated in large files</li>
+<li>Float-based ledger design increases long-term financial risk</li>
+<li>Notification/relay architecture appears mismatched in current implementation</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">Appendix: key files reviewed</h2><a id="user-content-appendix-key-files-reviewed" class="anchor" aria-label="Permalink: Appendix: key files reviewed" href="#appendix-key-files-reviewed"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li><code>go.mod</code></li>
+<li><code>cmd/server/main.go</code></li>
+<li><code>docs/architecture-design.md</code></li>
+<li><code>internal/db/{db.go,migrations.go}</code></li>
+<li><code>internal/auth/*</code></li>
+<li><code>internal/middleware/*</code></li>
+<li><code>internal/registry/*</code></li>
+<li><code>internal/trade/*</code></li>
+<li><code>internal/payment/*</code></li>
+<li><code>internal/cert/handler.go</code></li>
+<li><code>internal/boost/handler.go</code></li>
+<li><code>internal/dispute/*</code></li>
+<li><code>internal/relay/handler.go</code></li>
+<li>Binary artifacts: <code>atel-platform-new</code>, <code>server-static</code>
+</li>
+</ul>
+</div></body></html>

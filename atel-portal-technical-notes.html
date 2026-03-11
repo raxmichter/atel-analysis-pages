@@ -1,0 +1,393 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Atel Portal Technical Notes</title><style>
+body{font-family:Inter,system-ui,-apple-system,sans-serif;max-width:980px;margin:40px auto;padding:0 20px;line-height:1.6;color:#111;background:#fafafa}
+a{color:#0b57d0;text-decoration:none} a:hover{text-decoration:underline}
+.card{background:white;border:1px solid #e5e7eb;border-radius:16px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.03)}
+pre{white-space:pre-wrap;word-break:break-word;background:#f6f8fa;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f4f6;padding:2px 6px;border-radius:6px}
+ul{padding-left:22px} li{margin:8px 0}.muted{color:#666}.top{margin-bottom:20px}
+</style></head><body><div class="top"><a href="../index.html">← Back to index</a></div><div class="card"><h1>Atel Portal Technical Notes</h1><p class="muted"><a href="./reports/atel-portal-technical-notes.md">Download raw markdown</a></p><div class="markdown-heading"><h1 class="heading-element">ATEL Portal — Executive Technical Notes</h1><a id="user-content-atel-portal--executive-technical-notes" class="anchor" aria-label="Permalink: ATEL Portal — Executive Technical Notes" href="#atel-portal--executive-technical-notes"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h2 class="heading-element">1) Executive summary</h2><a id="user-content-1-executive-summary" class="anchor" aria-label="Permalink: 1) Executive summary" href="#1-executive-summary"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>This repository is a <strong>frontend-heavy Next.js portal</strong> for the ATEL ecosystem, combining:</p>
+<ul>
+<li>marketing site,</li>
+<li>documentation hub,</li>
+<li>agent directory,</li>
+<li>marketplace views,</li>
+<li>user dashboard,</li>
+<li>admin console.</li>
+</ul>
+<p>It presents a compelling product story and broad surface area, but technically it is best characterized as a <strong>UI shell over an external platform API</strong> (<code>https://api.atelai.org</code>) rather than a full product stack. The backend/protocol implementation is not in this repo.</p>
+<p><strong>Bottom line for executives:</strong> strong narrative and decent product packaging; weak engineering hardening signals for enterprise readiness in current state.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">2) What this repo appears to be / product role in the broader Atel stack</h2><a id="user-content-2-what-this-repo-appears-to-be--product-role-in-the-broader-atel-stack" class="anchor" aria-label="Permalink: 2) What this repo appears to be / product role in the broader Atel stack" href="#2-what-this-repo-appears-to-be--product-role-in-the-broader-atel-stack"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">What it is</h3><a id="user-content-what-it-is" class="anchor" aria-label="Permalink: What it is" href="#what-it-is"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Next.js App Router frontend (<code>src/app/*</code>) with Tailwind styling.</li>
+<li>Central API client wrappers in <code>src/lib/api.ts</code> and admin helpers in <code>src/lib/admin-api.ts</code>.</li>
+<li>Public protocol/brand assets in <code>public/docs/*</code> and <code>public/branding/*</code>.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">What it is not</h3><a id="user-content-what-it-is-not" class="anchor" aria-label="Permalink: What it is not" href="#what-it-is-not"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>No backend services, no smart contract code, no database schema, no worker/queue code in this repo.</li>
+<li>No proof generation, anchoring, trust computation engines in code here; those are represented as docs/claims and consumed via API.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Product role in Atel stack</h3><a id="user-content-product-role-in-atel-stack" class="anchor" aria-label="Permalink: Product role in Atel stack" href="#product-role-in-atel-stack"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>This repo appears to be the <strong>presentation and operations console layer</strong> for the broader ATEL platform:</p>
+<ul>
+<li>Discovery + growth (<code>/agents</code>, <code>/marketplace</code>, <code>/pricing</code>, <code>/docs</code>).</li>
+<li>User operations (<code>/dashboard/*</code>).</li>
+<li>Internal operations (<code>/admin/*</code>).</li>
+<li>Protocol evangelism (<code>/docs/*</code>, <code>public/docs/protocol-specification.md</code>).</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">3) Frontend architecture and UX/platform structure</h2><a id="user-content-3-frontend-architecture-and-uxplatform-structure" class="anchor" aria-label="Permalink: 3) Frontend architecture and UX/platform structure" href="#3-frontend-architecture-and-uxplatform-structure"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Architecture</h3><a id="user-content-architecture" class="anchor" aria-label="Permalink: Architecture" href="#architecture"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Framework: Next.js 16 + React 19 + TypeScript (<code>package.json</code>).</li>
+<li>Route model: App Router with mixed static/dynamic rendering.</li>
+<li>Styling: Tailwind v4 + custom CSS variables (<code>src/app/globals.css</code>).</li>
+<li>Shared layout: global header/footer in <code>src/app/layout.tsx</code>.</li>
+<li>Data access:
+<ul>
+<li>
+<code>src/lib/api.ts</code> for platform/user-facing endpoints.</li>
+<li>
+<code>src/lib/admin-api.ts</code> for admin login and admin actions.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Platform structure in the UI</h3><a id="user-content-platform-structure-in-the-ui" class="anchor" aria-label="Permalink: Platform structure in the UI" href="#platform-structure-in-the-ui"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<strong>Public marketing + docs:</strong> homepage and <code>/docs/*</code> pages are content-rich, largely static.</li>
+<li>
+<strong>Directory + detail pages:</strong> <code>/agents</code>, <code>/agents/[did]</code> consume registry/trust/order data.</li>
+<li>
+<strong>Marketplace:</strong> <code>/marketplace</code>, <code>/marketplace/[orderId]</code> provide two-sided market views.</li>
+<li>
+<strong>Dashboard:</strong> query-parameter DID-based pages for balance, transactions, orders, certification, boost (<code>/dashboard/*</code>).</li>
+<li>
+<strong>Admin:</strong> client-rendered admin pages (<code>/admin/*</code>) with token-in-localStorage flow.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">UX characteristics</h3><a id="user-content-ux-characteristics" class="anchor" aria-label="Permalink: UX characteristics" href="#ux-characteristics"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Strong visual consistency and brand system.</li>
+<li>Clear information architecture by stakeholder type (public/user/admin).</li>
+<li>Good copy for explaining protocol concepts to non-experts.</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">4) Engineering strengths</h2><a id="user-content-4-engineering-strengths" class="anchor" aria-label="Permalink: 4) Engineering strengths" href="#4-engineering-strengths"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<p><strong>Clean route segmentation by business domain</strong></p>
+<ul>
+<li>Admin, dashboard, docs, marketplace, agents are clearly separated.</li>
+</ul>
+</li>
+<li>
+<p><strong>Centralized API abstraction exists</strong></p>
+<ul>
+<li>
+<code>src/lib/api.ts</code> provides one place for many platform calls.</li>
+</ul>
+</li>
+<li>
+<p><strong>Protocol documentation depth is substantial</strong></p>
+<ul>
+<li>
+<code>public/docs/protocol-specification.md</code> is very detailed and can support partner/integrator onboarding.</li>
+</ul>
+</li>
+<li>
+<p><strong>Build health is currently good</strong></p>
+<ul>
+<li>
+<code>npm run build</code> succeeded and generated all routes.</li>
+</ul>
+</li>
+<li>
+<p><strong>Design coherence is strong</strong></p>
+<ul>
+<li>Consistent theming, typography, and visual hierarchy across pages.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">5) Engineering weaknesses / technical debt</h2><a id="user-content-5-engineering-weaknesses--technical-debt" class="anchor" aria-label="Permalink: 5) Engineering weaknesses / technical debt" href="#5-engineering-weaknesses--technical-debt"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<p><strong>Lint quality is poor right now (significant debt visible)</strong></p>
+<ul>
+<li>
+<code>npm run lint</code> produced <strong>33 errors, 2 warnings</strong>.</li>
+<li>Frequent <code>any</code> usage across core pages and API clients.</li>
+<li>React hook lint rule violations (<code>set-state-in-effect</code>) in multiple dashboard pages.</li>
+</ul>
+</li>
+<li>
+<p><strong>README is still template-level</strong></p>
+<ul>
+<li>
+<code>README.md</code> remains default create-next-app boilerplate; does not describe architecture, env vars, or operations.</li>
+</ul>
+</li>
+<li>
+<p><strong>Backend dependency is hard-coupled and implicit</strong></p>
+<ul>
+<li>
+<code>NEXT_PUBLIC_PLATFORM_URL</code> defaults to production API in code; this is risky for development/testing isolation.</li>
+</ul>
+</li>
+<li>
+<p><strong>Inconsistent and duplicated fetch patterns</strong></p>
+<ul>
+<li>Some pages use centralized client functions; others inline <code>fetch</code> directly.</li>
+<li>Increases drift risk and makes behavior/security consistency harder.</li>
+</ul>
+</li>
+<li>
+<p><strong>Signs of partial/placeholder integrations</strong></p>
+<ul>
+<li>Admin pages include fallback copy like “API may not have list endpoint yet,” indicating incomplete integration certainty.</li>
+</ul>
+</li>
+<li>
+<p><strong>No tests in repo</strong></p>
+<ul>
+<li>No unit/integration/E2E test suite detected.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">6) Code quality and maintainability assessment</h2><a id="user-content-6-code-quality-and-maintainability-assessment" class="anchor" aria-label="Permalink: 6) Code quality and maintainability assessment" href="#6-code-quality-and-maintainability-assessment"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p><strong>Overall assessment: Medium-Low maintainability in current form.</strong></p>
+<ul>
+<li>Positive:
+<ul>
+<li>Route/file organization is intuitive.</li>
+<li>Reusable component pattern exists (<code>Header</code>, <code>Footer</code>, shared badges/cards in-page).</li>
+</ul>
+</li>
+<li>Negative:
+<ul>
+<li>Heavy <code>any</code> typing weakens TypeScript safety.</li>
+<li>Repeated business logic and repeated status/color mappings across pages.</li>
+<li>Weak guardrails: build passes while lint fails badly, implying quality gates are not enforced in delivery path.</li>
+<li>No visible test harness to prevent regressions.</li>
+</ul>
+</li>
+</ul>
+<p>For an executive audience: this is shippable UI code, but not yet “high-discipline product engineering” code.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">7) Security / privacy / auth observations</h2><a id="user-content-7-security--privacy--auth-observations" class="anchor" aria-label="Permalink: 7) Security / privacy / auth observations" href="#7-security--privacy--auth-observations"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<p><strong>Admin auth is browser-token based (localStorage)</strong></p>
+<ul>
+<li>
+<code>src/lib/admin-api.ts</code> stores bearer token in <code>localStorage</code> (<code>atel_admin_token</code>).</li>
+<li>This is vulnerable to token theft in XSS scenarios and is weaker than httpOnly cookie/session patterns.</li>
+</ul>
+</li>
+<li>
+<p><strong>Admin route protection is client-side redirect, not server-side gate</strong></p>
+<ul>
+<li>Pages check <code>isLoggedIn()</code> in <code>useEffect</code>; initial route access is not strongly server-enforced in this codebase.</li>
+</ul>
+</li>
+<li>
+<p><strong>DID-in-query model for many dashboard reads</strong></p>
+<ul>
+<li>Multiple calls are made with <code>?did=...</code>; if backend authorization is weak, risk of account data exposure (IDOR-style behavior).</li>
+</ul>
+</li>
+<li>
+<p><strong>No visible CSP/security header hardening in this repo</strong></p>
+<ul>
+<li>
+<code>next.config.ts</code> is effectively empty.</li>
+</ul>
+</li>
+<li>
+<p><strong>Dependency security</strong></p>
+<ul>
+<li>
+<code>npm audit</code> reports <strong>2 vulnerabilities</strong> (1 moderate, 1 high) in dev dependency tree.</li>
+</ul>
+</li>
+<li>
+<p><strong>Good practice observed</strong></p>
+<ul>
+<li>External links generally use <code>rel="noreferrer"</code> in key areas.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">8) Product maturity and completeness signals</h2><a id="user-content-8-product-maturity-and-completeness-signals" class="anchor" aria-label="Permalink: 8) Product maturity and completeness signals" href="#8-product-maturity-and-completeness-signals"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Mature signals</h3><a id="user-content-mature-signals" class="anchor" aria-label="Permalink: Mature signals" href="#mature-signals"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Broad end-to-end UX footprint (public + ops + admin).</li>
+<li>Detailed docs and protocol positioning are unusually thorough for an early frontend.</li>
+<li>Branded, coherent interfaces imply product thinking, not just engineering experiment.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Immature signals</h3><a id="user-content-immature-signals" class="anchor" aria-label="Permalink: Immature signals" href="#immature-signals"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Root README/documentation for developers is underdeveloped.</li>
+<li>Hardcoded marketing/stat values on homepage (e.g., tests/modules/chains numbers) reduce trust unless auto-sourced.</li>
+<li>Lint debt and missing tests suggest pre-hardening phase.</li>
+<li>Several pages communicate “coming soon” or endpoint uncertainty.</li>
+</ul>
+<p><strong>Interpretation:</strong> likely early commercialization/beta stage, not enterprise-hardened GA.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">9) Operational readiness / deployability / observability</h2><a id="user-content-9-operational-readiness--deployability--observability" class="anchor" aria-label="Permalink: 9) Operational readiness / deployability / observability" href="#9-operational-readiness--deployability--observability"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Deployability</h3><a id="user-content-deployability" class="anchor" aria-label="Permalink: Deployability" href="#deployability"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Strong: standard Next.js app; <code>npm run build</code> succeeds.</li>
+<li>Weak: no explicit deployment runbooks, environment matrix, or <code>.env.example</code> guidance.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Observability</h3><a id="user-content-observability" class="anchor" aria-label="Permalink: Observability" href="#observability"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>No visible telemetry/instrumentation (Sentry/Datadog/OpenTelemetry) in this repo.</li>
+<li>No error boundary strategy or structured frontend logging beyond basic UI error messages.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Operational risk</h3><a id="user-content-operational-risk" class="anchor" aria-label="Permalink: Operational risk" href="#operational-risk"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Heavy runtime dependence on upstream API availability.</li>
+<li>If <code>api.atelai.org</code> degrades, large parts of portal degrade; fallback UX exists but is basic.</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">10) Scalability and extensibility</h2><a id="user-content-10-scalability-and-extensibility" class="anchor" aria-label="Permalink: 10) Scalability and extensibility" href="#10-scalability-and-extensibility"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Scalability positives</h3><a id="user-content-scalability-positives" class="anchor" aria-label="Permalink: Scalability positives" href="#scalability-positives"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>App Router segmentation supports growth by domain.</li>
+<li>Many docs pages are static and cheap to serve.</li>
+<li>Dynamic pages are scoped to data-heavy routes.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Scalability constraints</h3><a id="user-content-scalability-constraints" class="anchor" aria-label="Permalink: Scalability constraints" href="#scalability-constraints"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>API response shapes are loosely typed (<code>any</code>), increasing break risk as backend evolves.</li>
+<li>Repeated fetch/state logic per page will become costly as features increase.</li>
+<li>No visible caching/data-layer standardization for client pages (e.g., React Query/SWR patterns not used).</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Extensibility judgment</h3><a id="user-content-extensibility-judgment" class="anchor" aria-label="Permalink: Extensibility judgment" href="#extensibility-judgment"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>Moderate: structure can evolve, but technical discipline upgrades are needed first to avoid compounding debt.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">11) Key risks (technical + commercialization)</h2><a id="user-content-11-key-risks-technical--commercialization" class="anchor" aria-label="Permalink: 11) Key risks (technical + commercialization)" href="#11-key-risks-technical--commercialization"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<p><strong>Credibility gap risk</strong></p>
+<ul>
+<li>Frontend makes strong protocol/security/commercial claims; this repo alone cannot verify backend execution.</li>
+</ul>
+</li>
+<li>
+<p><strong>Security posture risk in admin experience</strong></p>
+<ul>
+<li>localStorage token model + client-side gating are below enterprise expectations.</li>
+</ul>
+</li>
+<li>
+<p><strong>Product reliability risk</strong></p>
+<ul>
+<li>No tests + lint debt + broad surface area = higher regression probability.</li>
+</ul>
+</li>
+<li>
+<p><strong>Go-to-market risk</strong></p>
+<ul>
+<li>If claims (trust, escrow, anchoring, dispute workflows) are not consistently delivered by backend, buyer trust erosion could be rapid.</li>
+</ul>
+</li>
+<li>
+<p><strong>Platform concentration risk</strong></p>
+<ul>
+<li>Frontend value is tightly coupled to one API domain; low resilience to backend instability.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">12) Strategic upside / moat potential from the codebase itself</h2><a id="user-content-12-strategic-upside--moat-potential-from-the-codebase-itself" class="anchor" aria-label="Permalink: 12) Strategic upside / moat potential from the codebase itself" href="#12-strategic-upside--moat-potential-from-the-codebase-itself"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>From this codebase <strong>alone</strong>, moat is limited.</p>
+<p>Where upside exists:</p>
+<ul>
+<li>Strong protocol storytelling and partner-facing documentation asset.</li>
+<li>Cohesive UI that can accelerate onboarding and perceived product maturity.</li>
+<li>Clear product model articulation (directory + marketplace + trust + payments + admin).</li>
+</ul>
+<p>Where moat does <strong>not</strong> appear in this repo:</p>
+<ul>
+<li>Proprietary trust/scoring/crypto engine implementation.</li>
+<li>Defensible backend workflows.</li>
+<li>Deep technical barriers in frontend architecture itself.</li>
+</ul>
+<p><strong>Executive interpretation:</strong> moat, if real, lives in backend network effects and protocol execution—not in this repository.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">13) Recommendation with rationale</h2><a id="user-content-13-recommendation-with-rationale" class="anchor" aria-label="Permalink: 13) Recommendation with rationale" href="#13-recommendation-with-rationale"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p><strong>Recommendation: Proceed as a promising beta frontend, but do not treat as enterprise-ready without a hardening phase.</strong></p>
+<div class="markdown-heading"><h3 class="heading-element">Suggested near-term executive path</h3><a id="user-content-suggested-near-term-executive-path" class="anchor" aria-label="Permalink: Suggested near-term executive path" href="#suggested-near-term-executive-path"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<strong>Approve limited customer-facing usage</strong> (beta/early adopters).</li>
+<li>
+<strong>Fund a focused hardening sprint (4–8 weeks)</strong> covering:
+<ul>
+<li>strict TypeScript typing and lint cleanup,</li>
+<li>server-side auth/session improvements for admin,</li>
+<li>test coverage for critical flows (orders/payments/admin actions),</li>
+<li>environment hygiene/docs and operational instrumentation.</li>
+</ul>
+</li>
+<li>
+<strong>Require backend evidence package</strong> before scaling sales claims:
+<ul>
+<li>SLA metrics,</li>
+<li>dispute/settlement correctness proofs,</li>
+<li>security review outcomes,</li>
+<li>protocol conformance tests.</li>
+</ul>
+</li>
+</ol>
+<p>Rationale: the product direction is credible and commercially legible, but current engineering signals indicate a transition-stage system, not a hardened production foundation.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">14) Executive bullets: pros, cons, strengths, weaknesses</h2><a id="user-content-14-executive-bullets-pros-cons-strengths-weaknesses" class="anchor" aria-label="Permalink: 14) Executive bullets: pros, cons, strengths, weaknesses" href="#14-executive-bullets-pros-cons-strengths-weaknesses"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Pros</h3><a id="user-content-pros" class="anchor" aria-label="Permalink: Pros" href="#pros"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Broad product surface already represented in UI.</li>
+<li>Strong protocol and integration documentation.</li>
+<li>Clean visual identity and coherent UX.</li>
+<li>Build is healthy and deployable as Next.js app.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Cons</h3><a id="user-content-cons" class="anchor" aria-label="Permalink: Cons" href="#cons"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Significant lint/type-quality debt.</li>
+<li>Weak admin auth pattern (localStorage token model).</li>
+<li>No visible tests/observability in repo.</li>
+<li>Heavy dependency on external backend with limited local safeguards.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Strengths</h3><a id="user-content-strengths" class="anchor" aria-label="Permalink: Strengths" href="#strengths"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Clear segmentation by stakeholder/workflow.</li>
+<li>Good narrative framing for trust + marketplace positioning.</li>
+<li>Central API abstraction present (partial).</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Weaknesses</h3><a id="user-content-weaknesses" class="anchor" aria-label="Permalink: Weaknesses" href="#weaknesses"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Inconsistent engineering rigor across modules.</li>
+<li>Placeholder/error-copy suggests incomplete endpoint confidence.</li>
+<li>Root developer docs are insufficient for scale onboarding.</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">Verification commands run</h2><a id="user-content-verification-commands-run" class="anchor" aria-label="Permalink: Verification commands run" href="#verification-commands-run"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<code>npm ci</code> (installed dependencies; audit reported 2 vulnerabilities in full tree)</li>
+<li>
+<code>npm run lint</code> (<strong>failed</strong>: 33 errors, 2 warnings)</li>
+<li>
+<code>npm run build</code> (<strong>passed</strong>; routes compiled successfully)</li>
+<li>
+<code>npm audit --omit=dev</code> (0 vulnerabilities)</li>
+<li>
+<code>npm audit</code> (2 vulnerabilities: 1 moderate, 1 high in dependency tree)</li>
+</ul>
+</div></body></html>

@@ -1,0 +1,419 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Atel Risk Register</title><style>
+body{font-family:Inter,system-ui,-apple-system,sans-serif;max-width:980px;margin:40px auto;padding:0 20px;line-height:1.6;color:#111;background:#fafafa}
+a{color:#0b57d0;text-decoration:none} a:hover{text-decoration:underline}
+.card{background:white;border:1px solid #e5e7eb;border-radius:16px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.03)}
+pre{white-space:pre-wrap;word-break:break-word;background:#f6f8fa;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f4f6;padding:2px 6px;border-radius:6px}
+ul{padding-left:22px} li{margin:8px 0}.muted{color:#666}.top{margin-bottom:20px}
+</style></head><body><div class="top"><a href="../index.html">← Back to index</a></div><div class="card"><h1>Atel Risk Register</h1><p class="muted"><a href="./reports/atel-risk-register.md">Download raw markdown</a></p><div class="markdown-heading"><h1 class="heading-element">ATEL Risk Register (Board + Operator Ready)</h1><a id="user-content-atel-risk-register-board--operator-ready" class="anchor" aria-label="Permalink: ATEL Risk Register (Board + Operator Ready)" href="#atel-risk-register-board--operator-ready"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p><em>Date: 2026-03-11</em></p>
+<div class="markdown-heading"><h2 class="heading-element">Scope and method</h2><a id="user-content-scope-and-method" class="anchor" aria-label="Permalink: Scope and method" href="#scope-and-method"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>This register synthesizes risks from:</p>
+<ul>
+<li><code>atel-technical-executive-analysis.md</code></li>
+<li><code>atel-competitive-landscape-executive-analysis.md</code></li>
+<li><code>atel-go-to-market-executive-analysis.md</code></li>
+<li><code>analysis/state/atel-platform-technical-notes.md</code></li>
+<li><code>analysis/state/atel-portal-technical-notes.md</code></li>
+<li><code>analysis/state/atel-sdk-technical-notes.md</code></li>
+</ul>
+<p>Severity and likelihood are assessed for current state, assuming no major hardening intervention.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">1) Top 10 risks summary</h2><a id="user-content-1-top-10-risks-summary" class="anchor" aria-label="Permalink: 1) Top 10 risks summary" href="#1-top-10-risks-summary"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<table>
+<thead>
+<tr>
+<th>Rank</th>
+<th>Risk ID</th>
+<th>Risk</th>
+<th>Why it matters now</th>
+<th>Immediate executive action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>ATEL-R01</td>
+<td>Financial integrity failure (float ledger + accounting gaps)</td>
+<td>Settlement/dispute errors can directly destroy trust and create legal exposure.</td>
+<td>Mandate money-safe model (integer minor units/decimal), ledger invariants, reconciliation sign-off before scale.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>ATEL-R02</td>
+<td>Security incident on auth/admin/relay surfaces</td>
+<td>Token/session/default-secret and unauth surfaces create exploit path risk.</td>
+<td>Force security hardening sprint and block broad launch until critical controls pass.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ATEL-R03</td>
+<td>Trust model fragmentation (SDK vs Platform semantics)</td>
+<td>Weakens core differentiator: “verifiable trust tied to settlement.”</td>
+<td>Establish one canonical trust pipeline and one source of truth for trust acceptance.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>ATEL-R04</td>
+<td>Schema/API contract drift across repos</td>
+<td>Runtime breaks and failed customer journeys undermine reliability and sales credibility.</td>
+<td>Introduce cross-repo contract tests + migration completeness checks in CI gates.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>ATEL-R05</td>
+<td>Enterprise compliance gap (audit-readiness)</td>
+<td>Regulated buyers will stall or fail procurement without evidence packaging.</td>
+<td>Prioritize compliance evidence layer + control mapping (NIST/ISO/EU logging expectations).</td>
+</tr>
+<tr>
+<td>6</td>
+<td>ATEL-R06</td>
+<td>GTM narrative split (marketplace vs trust control plane)</td>
+<td>Diluted positioning slows sales cycles and creates buyer confusion.</td>
+<td>Standardize narrative: “trust-and-settlement control plane for high-stakes agent workflows.”</td>
+</tr>
+<tr>
+<td>7</td>
+<td>ATEL-R07</td>
+<td>Marketplace liquidity and synthetic-network risk</td>
+<td>Current observed depth is low (few verified/online agents/offers), limiting marketplace-led growth.</td>
+<td>Treat marketplace as testbed, not core revenue engine in next 6–12 months.</td>
+</tr>
+<tr>
+<td>8</td>
+<td>ATEL-R08</td>
+<td>Observability and incident-response immaturity</td>
+<td>Limited telemetry/runbooks slows recovery and weakens enterprise confidence.</td>
+<td>Fund telemetry baseline, SLOs, incident runbooks, and on-call procedures.</td>
+</tr>
+<tr>
+<td>9</td>
+<td>ATEL-R09</td>
+<td>Portal/Backend coupling and frontend quality debt</td>
+<td>Lint/type/test debt increases breakage probability as backend evolves.</td>
+<td>Enforce strict typing/tests and remove <code>any</code>-driven contract assumptions.</td>
+</tr>
+<tr>
+<td>10</td>
+<td>ATEL-R10</td>
+<td>Ecosystem displacement by incumbents/standards</td>
+<td>Cloud/orchestration/observability stacks can absorb “good enough” trust features.</td>
+<td>Win via integration-first strategy and defend unique proof+settlement capability.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">2) Full risk register</h2><a id="user-content-2-full-risk-register" class="anchor" aria-label="Permalink: 2) Full risk register" href="#2-full-risk-register"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<table>
+<thead>
+<tr>
+<th>Risk ID</th>
+<th>Risk title</th>
+<th>Category</th>
+<th>Description</th>
+<th>Severity</th>
+<th>Likelihood</th>
+<th>Time horizon</th>
+<th>Leading indicators</th>
+<th>Mitigation options</th>
+<th>Suggested owner</th>
+<th>Decision impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ATEL-R01</td>
+<td>Financial integrity failure in settlement/accounting</td>
+<td>financial</td>
+<td>Float-based money logic and inconsistent fee-credit paths can cause reconciliation errors and payout disputes.</td>
+<td>Critical</td>
+<td>High</td>
+<td>Near-term (0–3 mo)</td>
+<td>Reconciliation breaks; unexplained balance deltas; dispute reversals; manual ledger fixes rising</td>
+<td>Move to integer/decimal accounting; define ledger invariants; dual-entry checks; daily automated reconciliation; finance+engineering sign-off gates</td>
+<td>CTO + Head of Finance/Payments</td>
+<td><strong>Go/No-Go for any scaled transaction volume</strong></td>
+</tr>
+<tr>
+<td>ATEL-R02</td>
+<td>Security breach via auth/admin/relay weaknesses</td>
+<td>security</td>
+<td>Uneven auth defaults (e.g., default JWT fallback), localStorage admin tokens, permissive surfaces, and unauth relay patterns increase exploit likelihood.</td>
+<td>Critical</td>
+<td>High</td>
+<td>Near-term (0–3 mo)</td>
+<td>Unauthorized admin actions; abnormal token reuse; relay abuse spikes; security audit findings</td>
+<td>Remove insecure defaults; enforce secret boot checks; server-side admin sessions; endpoint auth hardening; threat model + penetration test</td>
+<td>CISO / Security Lead</td>
+<td><strong>Blocks enterprise pilots and raises incident liability</strong></td>
+</tr>
+<tr>
+<td>ATEL-R03</td>
+<td>Canonical trust pipeline not unified</td>
+<td>technical</td>
+<td>SDK trust/proof semantics and Platform trust score/update paths are not fully unified, undermining trust consistency.</td>
+<td>High</td>
+<td>High</td>
+<td>Near-term (0–6 mo)</td>
+<td>Trust score anomalies; inconsistent verification outcomes across components; customer questions on “source of truth”</td>
+<td>Define canonical trust acceptance pipeline; unify trust schema; remove self-reported trust shortcuts for critical flows; add end-to-end trust conformance tests</td>
+<td>Chief Architect / Head of Platform</td>
+<td><strong>Core product differentiation risk</strong></td>
+</tr>
+<tr>
+<td>ATEL-R04</td>
+<td>Cross-repo contract and migration drift</td>
+<td>ops</td>
+<td>Documented mismatches (schema/API/script/export drift) can break core journeys and deployment safety.</td>
+<td>High</td>
+<td>High</td>
+<td>Near-term (0–3 mo)</td>
+<td>Failed deploys on clean env; portal runtime errors post backend release; migration rollback events</td>
+<td>Add contract-test suite (Portal↔Platform↔SDK); migration completeness checks; release version matrix; CI block on drift</td>
+<td>VP Engineering / Release Manager</td>
+<td><strong>Impacts release confidence and customer uptime</strong></td>
+</tr>
+<tr>
+<td>ATEL-R05</td>
+<td>Compliance and audit-readiness shortfall</td>
+<td>legal</td>
+<td>Current posture is below typical SOC2/ISO enterprise expectations despite trust-heavy positioning.</td>
+<td>High</td>
+<td>Medium-High</td>
+<td>3–12 mo</td>
+<td>Procurement stalls; security questionnaires fail; extended legal review cycles</td>
+<td>Build compliance evidence exports; map controls to NIST/ISO/EU logging requirements; formalize audit logs/retention/access controls</td>
+<td>COO + Compliance Lead</td>
+<td><strong>Determines ability to close regulated accounts</strong></td>
+</tr>
+<tr>
+<td>ATEL-R06</td>
+<td>GTM positioning split and diluted buyer message</td>
+<td>GTM</td>
+<td>Competing narratives (open marketplace economy vs enterprise trust control plane) slow decisions and confuse budget owners.</td>
+<td>High</td>
+<td>High</td>
+<td>Near-term (0–6 mo)</td>
+<td>Low conversion from pilots; mixed messaging in decks/docs; long cycles without champion clarity</td>
+<td>Single ICP-led narrative; verticalized proof points; unify sales + product language; retire broad marketplace-first messaging for enterprise motion</td>
+<td>CRO / CEO</td>
+<td><strong>Affects pipeline quality and conversion rate</strong></td>
+</tr>
+<tr>
+<td>ATEL-R07</td>
+<td>Marketplace depth/network quality risk</td>
+<td>market</td>
+<td>Observable network depth appears early (low verified/online ratio, shallow offers), weakening marketplace-led growth assumptions.</td>
+<td>High</td>
+<td>High</td>
+<td>0–12 mo</td>
+<td>Flat active offer count; low repeat orders; high share of synthetic/non-productive agents</td>
+<td>Reframe marketplace as controlled sandbox; focus on curated design partners; enforce quality/verification thresholds</td>
+<td>GM Marketplace / Head of Growth</td>
+<td><strong>Impacts revenue forecast realism and investor narrative</strong></td>
+</tr>
+<tr>
+<td>ATEL-R08</td>
+<td>Operational resilience and observability gap</td>
+<td>ops</td>
+<td>Limited structured telemetry, sparse SLO governance, and immature runbooks increase incident MTTR and contractual risk.</td>
+<td>High</td>
+<td>Medium-High</td>
+<td>Near-term (0–6 mo)</td>
+<td>Unknown root cause incidents; prolonged outages; manual firefighting; lack of service-level reporting</td>
+<td>Instrument logs/metrics/traces; define SLOs and error budgets; incident runbooks and on-call drills; postmortem process</td>
+<td>Head of SRE / Platform Ops</td>
+<td><strong>Constrains scale and enterprise SLA commitments</strong></td>
+</tr>
+<tr>
+<td>ATEL-R09</td>
+<td>Frontend contract fragility and quality debt</td>
+<td>technical</td>
+<td>Portal has significant lint/type debt and weak test coverage; heavy backend assumptions can cause production regressions.</td>
+<td>Medium-High</td>
+<td>High</td>
+<td>0–6 mo</td>
+<td>Rising client-side runtime errors; release rollbacks; repeated hotfixes in dashboard/admin flows</td>
+<td>Strict TS contracts; eliminate <code>any</code> in critical paths; add integration/E2E tests; centralize API client behavior</td>
+<td>Head of Product Engineering</td>
+<td><strong>Directly affects user trust and support burden</strong></td>
+</tr>
+<tr>
+<td>ATEL-R10</td>
+<td>Ecosystem displacement by incumbents and bundled platforms</td>
+<td>ecosystem</td>
+<td>Cloud and orchestration incumbents may bundle governance/traceability features, reducing Atel differentiation if not defended.</td>
+<td>High</td>
+<td>Medium</td>
+<td>6–18 mo</td>
+<td>Prospect objections: “already covered by cloud stack”; win-rate decline vs bundled alternatives</td>
+<td>Integration-first strategy (LangGraph/AutoGen/Temporal/MCP/A2A); focus on proof-enforced settlement outcomes incumbents lack</td>
+<td>CEO + Partnerships Lead</td>
+<td><strong>Strategic moat durability decision</strong></td>
+</tr>
+<tr>
+<td>ATEL-R11</td>
+<td>Credibility gap between claims and production maturity</td>
+<td>market</td>
+<td>Strong trust/compliance claims can backfire if reliability, consistency, and controls do not match enterprise diligence standards.</td>
+<td>High</td>
+<td>Medium-High</td>
+<td>Near-term (0–6 mo)</td>
+<td>Deal-stage drop-off after technical due diligence; negative reference calls; audit finding concentration</td>
+<td>Tighten external claims to verified capabilities; publish transparent reliability/security metrics; stage-gate marketing language</td>
+<td>CEO + Marketing + CTO</td>
+<td><strong>Brand trust and category leadership risk</strong></td>
+</tr>
+<tr>
+<td>ATEL-R12</td>
+<td>Supply-chain and dependency vulnerability exposure</td>
+<td>security</td>
+<td>Known dependency vulnerabilities and weak default hardening in developer/ops paths raise breach and compliance risk.</td>
+<td>Medium-High</td>
+<td>Medium</td>
+<td>0–6 mo</td>
+<td>Critical CVEs unresolved &gt;30 days; repeated dependency exceptions; security scanner failures</td>
+<td>Dependency upgrade cadence; SBOM + vulnerability policy; block release on critical vulns; secure secret handling standards</td>
+<td>Security Engineering Manager</td>
+<td><strong>Affects security audit outcomes and insurance posture</strong></td>
+</tr>
+<tr>
+<td>ATEL-R13</td>
+<td>Dispute/governance legitimacy risk</td>
+<td>legal</td>
+<td>If trust signals, proof quality, and dispute outcomes diverge, parties may challenge settlement fairness and platform neutrality.</td>
+<td>High</td>
+<td>Medium</td>
+<td>3–12 mo</td>
+<td>Dispute appeal rate rises; repeated manual overrides; conflicting evidence records</td>
+<td>Formal dispute policy; evidence-chain integrity checks; independent review workflow for high-value disputes</td>
+<td>Head of Trust &amp; Safety / Legal</td>
+<td><strong>Legal exposure and platform defensibility</strong></td>
+</tr>
+<tr>
+<td>ATEL-R14</td>
+<td>Scale-out architecture constraints</td>
+<td>technical</td>
+<td>In-process jobs, partial async strategy, and immature distributed coordination can degrade reliability under multi-instance growth.</td>
+<td>Medium-High</td>
+<td>Medium</td>
+<td>6–18 mo</td>
+<td>Queue/backlog growth; duplicate job processing; multi-instance state inconsistencies</td>
+<td>Externalize schedulers/queues; idempotent job design; distributed locks; load testing and capacity planning</td>
+<td>Principal Platform Engineer</td>
+<td><strong>Determines safe expansion path</strong></td>
+</tr>
+<tr>
+<td>ATEL-R15</td>
+<td>Long enterprise sales-cycle cash-flow pressure</td>
+<td>financial</td>
+<td>Heavy compliance/security selling motion may delay ARR realization versus operating burn.</td>
+<td>Medium</td>
+<td>Medium</td>
+<td>6–18 mo</td>
+<td>Pilot-to-paid conversion lag; CAC payback deterioration; runway compression scenarios</td>
+<td>Tight stage-gates for pilot spend; services-assisted monetization; target high-conviction vertical accounts first</td>
+<td>CFO + CRO</td>
+<td><strong>Runway and funding strategy sensitivity</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">3) Interdependency notes (risk amplification map)</h2><a id="user-content-3-interdependency-notes-risk-amplification-map" class="anchor" aria-label="Permalink: 3) Interdependency notes (risk amplification map)" href="#3-interdependency-notes-risk-amplification-map"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<strong>R03 (trust pipeline fragmentation)</strong> amplifies <strong>R13 (dispute legitimacy)</strong> and <strong>R11 (credibility gap)</strong> because inconsistent trust semantics undermine defensibility.</li>
+<li>
+<strong>R01 (financial integrity)</strong> amplifies <strong>R13 (legal exposure)</strong> and <strong>R11 (market trust)</strong> when settlement errors become customer-visible.</li>
+<li>
+<strong>R02 (security weaknesses)</strong> amplifies <strong>R05 (compliance readiness)</strong> and <strong>R15 (cash pressure)</strong> through delayed enterprise closes and incident costs.</li>
+<li>
+<strong>R04 (contract drift)</strong> amplifies <strong>R08 (ops instability)</strong> and <strong>R09 (portal regressions)</strong> by increasing release-induced outages.</li>
+<li>
+<strong>R06 (messaging split)</strong> amplifies <strong>R07 (marketplace depth risk)</strong> and <strong>R15 (sales-cycle pressure)</strong> via poor ICP targeting.</li>
+<li>
+<strong>R08 (observability gap)</strong> amplifies every near-term technical/security risk by increasing detection and recovery time.</li>
+<li>
+<strong>R10 (ecosystem displacement)</strong> amplifies <strong>R06 (GTM confusion)</strong> if positioning remains broad rather than integration-led.</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">4) Suggested prioritization order</h2><a id="user-content-4-suggested-prioritization-order" class="anchor" aria-label="Permalink: 4) Suggested prioritization order" href="#4-suggested-prioritization-order"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Priority A — Immediate board-level blockers (0–30 days)</h3><a id="user-content-priority-a--immediate-board-level-blockers-030-days" class="anchor" aria-label="Permalink: Priority A — Immediate board-level blockers (0–30 days)" href="#priority-a--immediate-board-level-blockers-030-days"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<strong>R01</strong> Financial integrity</li>
+<li>
+<strong>R02</strong> Security/auth hardening</li>
+<li>
+<strong>R03</strong> Canonical trust pipeline</li>
+<li>
+<strong>R04</strong> Contract/migration discipline</li>
+</ol>
+<div class="markdown-heading"><h3 class="heading-element">Priority B — Pilot viability and enterprise conversion (30–90 days)</h3><a id="user-content-priority-b--pilot-viability-and-enterprise-conversion-3090-days" class="anchor" aria-label="Permalink: Priority B — Pilot viability and enterprise conversion (30–90 days)" href="#priority-b--pilot-viability-and-enterprise-conversion-3090-days"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol start="5">
+<li>
+<strong>R05</strong> Compliance evidence and controls</li>
+<li>
+<strong>R08</strong> Observability/SLO/runbooks</li>
+<li>
+<strong>R06</strong> GTM narrative unification</li>
+<li>
+<strong>R09</strong> Portal quality and contract safety</li>
+</ol>
+<div class="markdown-heading"><h3 class="heading-element">Priority C — Scale and strategic defense (90+ days)</h3><a id="user-content-priority-c--scale-and-strategic-defense-90-days" class="anchor" aria-label="Permalink: Priority C — Scale and strategic defense (90+ days)" href="#priority-c--scale-and-strategic-defense-90-days"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol start="9">
+<li>
+<strong>R07</strong> Marketplace depth and quality strategy</li>
+<li>
+<strong>R13</strong> Dispute governance maturity</li>
+<li>
+<strong>R12</strong> Dependency/security operations maturation</li>
+<li>
+<strong>R14</strong> Scale-out architecture hardening</li>
+<li>
+<strong>R10</strong> Ecosystem moat defense</li>
+<li>
+<strong>R11</strong> Credibility governance (ongoing)</li>
+<li>
+<strong>R15</strong> Sales-cycle/cash discipline (ongoing)</li>
+</ol>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">5) Risk treatment posture: accept vs mitigate vs avoid</h2><a id="user-content-5-risk-treatment-posture-accept-vs-mitigate-vs-avoid" class="anchor" aria-label="Permalink: 5) Risk treatment posture: accept vs mitigate vs avoid" href="#5-risk-treatment-posture-accept-vs-mitigate-vs-avoid"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Mitigate (active engineering/GTM/control work required)</h3><a id="user-content-mitigate-active-engineeringgtmcontrol-work-required" class="anchor" aria-label="Permalink: Mitigate (active engineering/GTM/control work required)" href="#mitigate-active-engineeringgtmcontrol-work-required"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li><strong>R01, R02, R03, R04, R05, R08, R09, R12, R13, R14</strong></li>
+<li>Rationale: these are controllable execution risks with high downside and clear intervention paths.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Avoid (do not pursue current path until conditions change)</h3><a id="user-content-avoid-do-not-pursue-current-path-until-conditions-change" class="anchor" aria-label="Permalink: Avoid (do not pursue current path until conditions change)" href="#avoid-do-not-pursue-current-path-until-conditions-change"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<strong>R06</strong> Avoid broad dual-narrative GTM; do not run “marketplace-first + enterprise-governance-first” in parallel as equal motions.</li>
+<li>
+<strong>R07</strong> Avoid forecasting core growth from open marketplace liquidity in current network state.</li>
+<li>Rationale: strategic focus errors can consume runway faster than technical debt.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Accept (monitor and hedge; cannot fully eliminate)</h3><a id="user-content-accept-monitor-and-hedge-cannot-fully-eliminate" class="anchor" aria-label="Permalink: Accept (monitor and hedge; cannot fully eliminate)" href="#accept-monitor-and-hedge-cannot-fully-eliminate"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<strong>R10</strong> Some incumbents/OSS commoditization pressure is structural; accept as market reality while differentiating on proof-enforced settlement.</li>
+<li>
+<strong>R11</strong> Some credibility challenge is inherent in category creation; accept baseline skepticism but reduce with transparent evidence.</li>
+<li>
+<strong>R15</strong> Longer enterprise cycles are expected in regulated workflows; accept partially and manage with tighter cash/pipeline controls.</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">6) Operator notes: minimum governance cadence</h2><a id="user-content-6-operator-notes-minimum-governance-cadence" class="anchor" aria-label="Permalink: 6) Operator notes: minimum governance cadence" href="#6-operator-notes-minimum-governance-cadence"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Weekly executive risk review on <strong>Priority A/B</strong> risks with owner-level KPI updates.</li>
+<li>Monthly board risk packet with:
+<ul>
+<li>open/closed risk deltas,</li>
+<li>incident and reconciliation metrics,</li>
+<li>pilot pipeline conversion health,</li>
+<li>compliance readiness milestones.</li>
+</ul>
+</li>
+<li>Stage-gate rule: no broad-scale launch until <strong>R01–R05</strong> have documented control evidence and sign-off.</li>
+</ul>
+</div></body></html>

@@ -1,0 +1,412 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Atel Go To Market Executive Analysis V2</title><style>
+body{font-family:Inter,system-ui,-apple-system,sans-serif;max-width:980px;margin:40px auto;padding:0 20px;line-height:1.6;color:#111;background:#fafafa}
+a{color:#0b57d0;text-decoration:none} a:hover{text-decoration:underline}
+.card{background:white;border:1px solid #e5e7eb;border-radius:16px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.03)}
+pre{white-space:pre-wrap;word-break:break-word;background:#f6f8fa;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f4f6;padding:2px 6px;border-radius:6px}
+ul{padding-left:22px} li{margin:8px 0}.muted{color:#666}.top{margin-bottom:20px}
+</style></head><body><div class="top"><a href="../index.html">← Back to index</a></div><div class="card"><h1>Atel Go To Market Executive Analysis V2</h1><p class="muted"><a href="./reports/atel-go-to-market-executive-analysis-v2.md">Download raw markdown</a></p><div class="markdown-heading"><h1 class="heading-element">ATEL Go-to-Market Executive Analysis (v2)</h1><a id="user-content-atel-go-to-market-executive-analysis-v2" class="anchor" aria-label="Permalink: ATEL Go-to-Market Executive Analysis (v2)" href="#atel-go-to-market-executive-analysis-v2"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p><em>Date: 2026-03-11 (CDT)</em>
+<em>Audience: CEO, CRO/Head of GTM, CTO, CISO, Board observers</em></p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">0) Executive decision (what to do now)</h2><a id="user-content-0-executive-decision-what-to-do-now" class="anchor" aria-label="Permalink: 0) Executive decision (what to do now)" href="#0-executive-decision-what-to-do-now"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>ATEL should <strong>sell an enterprise trust control plane</strong> (identity, policy, proof, accountability) and treat the marketplace as a <strong>non-core experiment</strong> until hard commercial signals improve.</p>
+<p><strong>Decision for next 2 quarters:</strong></p>
+<ol>
+<li>
+<strong>Lead motion:</strong> enterprise design-partner sales in high-stakes workflows.</li>
+<li>
+<strong>Primary value claim:</strong> reduce audit/incident exposure and time-to-evidence.</li>
+<li>
+<strong>Commercial anchor:</strong> platform + enterprise controls + evidence package (not transaction commissions).</li>
+<li>
+<strong>Marketplace posture:</strong> keep alive for product learning and demos, but do not make it the narrative spine.</li>
+</ol>
+<p>If ATEL cannot pass a minimum proof gate (defined in Section 9) within 90–120 days, it should <strong>pause aggressive outbound</strong> and prioritize product hardening.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">1) Evidence base and current-state signal</h2><a id="user-content-1-evidence-base-and-current-state-signal" class="anchor" aria-label="Permalink: 1) Evidence base and current-state signal" href="#1-evidence-base-and-current-state-signal"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Sources used</h3><a id="user-content-sources-used" class="anchor" aria-label="Permalink: Sources used" href="#sources-used"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Local repo/docs from <code>atel-sdk-main</code> and <code>atel-portal-master</code>
+</li>
+<li>Live API checks (<code>api.atelai.org</code>): <code>/health</code>, <code>/registry/v1/stats</code>, <code>/registry/v1/search</code>, <code>/trade/v1/marketplace</code>, <code>/trade/v1/offers</code>
+</li>
+<li>Public category references: NIST AI RMF, EU AI Act Article 12, ISO/IEC 42001, LangSmith, Arize, Lakera, Protect AI, Credo, MCP/A2A ecosystem announcements</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Observed current-state metrics (snapshot)</h3><a id="user-content-observed-current-state-metrics-snapshot" class="anchor" aria-label="Permalink: Observed current-state metrics (snapshot)" href="#observed-current-state-metrics-snapshot"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<strong>165 agents</strong> listed</li>
+<li><strong>3 online</strong></li>
+<li><strong>2 verified</strong></li>
+<li><strong>152/165 synthetic-style DID records</strong></li>
+<li><strong>17 agents with non-zero task history</strong></li>
+<li><strong>138 combined tasks observed</strong></li>
+<li>Marketplace: <strong>4 active offers</strong>, <strong>1 seller with meaningful orders</strong>, <strong>1 completed order</strong>
+</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Interpretation</h3><a id="user-content-interpretation" class="anchor" aria-label="Permalink: Interpretation" href="#interpretation"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>The <strong>technical platform is real</strong>.</li>
+<li>The <strong>network economy signal is weak</strong>.</li>
+<li>Enterprise buyers will likely interpret current marketplace stats as <strong>early-stage/experimental</strong>, not production ecosystem maturity.</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">2) Explicit assumptions (state these in every internal GTM review)</h2><a id="user-content-2-explicit-assumptions-state-these-in-every-internal-gtm-review" class="anchor" aria-label="Permalink: 2) Explicit assumptions (state these in every internal GTM review)" href="#2-explicit-assumptions-state-these-in-every-internal-gtm-review"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<strong>Assumption A — Compliance pressure converts to budget:</strong> Organizations facing AI governance requirements will fund runtime evidence and controls, not just policy documentation.</li>
+<li>
+<strong>Assumption B — Multi-agent complexity grows:</strong> Teams moving from copilots to autonomous workflows will need stronger identity, policy, and forensics than today’s observability stack provides.</li>
+<li>
+<strong>Assumption C — ATEL can prove measurable business outcomes:</strong> e.g., reduced audit prep effort, faster incident triage, fewer blocked releases.</li>
+<li>
+<strong>Assumption D — Security/procurement trust is winnable:</strong> ATEL can meet enterprise requirements (SOC2 trajectory, IAM, auditability, data controls) quickly enough to avoid pipeline collapse.</li>
+<li>
+<strong>Assumption E — Marketplace is optional to core enterprise value:</strong> Enterprise revenue can scale without requiring broad external liquidity.</li>
+</ol>
+<div class="markdown-heading"><h3 class="heading-element">Failure conditions for these assumptions</h3><a id="user-content-failure-conditions-for-these-assumptions" class="anchor" aria-label="Permalink: Failure conditions for these assumptions" href="#failure-conditions-for-these-assumptions"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>No willingness to pay from governance/security budgets after pilots.</li>
+<li>Buyers perceive ATEL as “nice-to-have telemetry” vs control infrastructure.</li>
+<li>Time-to-value &gt; 90 days in pilots.</li>
+<li>Security review failure rate remains high.</li>
+<li>Marketplace narrative keeps confusing enterprise buying committees.</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">3) Buyer realism: who signs, whose budget, and what spend/pain gets replaced</h2><a id="user-content-3-buyer-realism-who-signs-whose-budget-and-what-spendpain-gets-replaced" class="anchor" aria-label="Permalink: 3) Buyer realism: who signs, whose budget, and what spend/pain gets replaced" href="#3-buyer-realism-who-signs-whose-budget-and-what-spendpain-gets-replaced"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h2 class="heading-element">3.1 Who actually signs</h2><a id="user-content-31-who-actually-signs" class="anchor" aria-label="Permalink: 3.1 Who actually signs" href="#31-who-actually-signs"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>In most enterprises, <strong>no single technical champion can close this alone</strong>. Typical signature path:</p>
+<ul>
+<li>
+<strong>Economic sign-off:</strong> CTO, CIO, VP Engineering, or VP Platform</li>
+<li>
+<strong>Risk veto/approval:</strong> CISO, Head of AI Governance, Model Risk, Internal Audit</li>
+<li>
+<strong>Commercial/procurement gate:</strong> Procurement + Legal + Security review</li>
+</ul>
+<p>For regulated sectors, assume <strong>dual sponsorship is required</strong> (engineering + risk).</p>
+<div class="markdown-heading"><h2 class="heading-element">3.2 Budget source (realistic)</h2><a id="user-content-32-budget-source-realistic" class="anchor" aria-label="Permalink: 3.2 Budget source (realistic)" href="#32-budget-source-realistic"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>ATEL will most often be funded from a blended pool:</p>
+<ul>
+<li>
+<strong>Platform engineering / DevTools budget</strong> (initial pilot and integration)</li>
+<li>
+<strong>Security/compliance budget</strong> (if evidence and policy enforcement are clear)</li>
+<li>
+<strong>Transformation/innovation budget</strong> (for first wave in enterprise AI programs)</li>
+</ul>
+<p>Less likely (near term):</p>
+<ul>
+<li>Standalone “agent marketplace spend” budget line</li>
+<li>Purely discretionary experimentation budget at scale</li>
+</ul>
+<div class="markdown-heading"><h2 class="heading-element">3.3 What ATEL replaces (or reduces)</h2><a id="user-content-33-what-atel-replaces-or-reduces" class="anchor" aria-label="Permalink: 3.3 What ATEL replaces (or reduces)" href="#33-what-atel-replaces-or-reduces"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>ATEL must be sold as replacing expensive failure modes, not adding another dashboard:</p>
+<ul>
+<li>Manual audit evidence gathering (screenshots/spreadsheets)</li>
+<li>Incident forensics drag across fragmented logs</li>
+<li>Repeated launch delays from unresolved governance questions</li>
+<li>One-off custom control scripts that break during scale-out</li>
+<li>Vendor risk exposure from unverifiable third-party agent interactions</li>
+</ul>
+<div class="markdown-heading"><h2 class="heading-element">3.4 Quantified pain themes to force in discovery</h2><a id="user-content-34-quantified-pain-themes-to-force-in-discovery" class="anchor" aria-label="Permalink: 3.4 Quantified pain themes to force in discovery" href="#34-quantified-pain-themes-to-force-in-discovery"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>Every opportunity should be qualified against at least one measurable pain:</p>
+<ul>
+<li>Hours per quarter spent on audit evidence assembly</li>
+<li>Mean time to investigate agent incidents</li>
+<li>Number of launches blocked by governance/security review</li>
+<li>Cost of production incidents tied to autonomous actions</li>
+<li>Cost and fragility of current “glue code controls”</li>
+</ul>
+<p>If buyer cannot quantify any of the above, deal quality is usually low.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">4) Category reality: ATEL is differentiated, but category boundaries are blurry</h2><a id="user-content-4-category-reality-atel-is-differentiated-but-category-boundaries-are-blurry" class="anchor" aria-label="Permalink: 4) Category reality: ATEL is differentiated, but category boundaries are blurry" href="#4-category-reality-atel-is-differentiated-but-category-boundaries-are-blurry"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>ATEL sits at the intersection of:</p>
+<ul>
+<li>AI observability</li>
+<li>AI security/runtime defense</li>
+<li>AI governance/risk tooling</li>
+<li>Agent infrastructure/protocol layers</li>
+</ul>
+<p>This is strategically powerful and commercially dangerous.</p>
+<div class="markdown-heading"><h3 class="heading-element">GTM confusion risks</h3><a id="user-content-gtm-confusion-risks" class="anchor" aria-label="Permalink: GTM confusion risks" href="#gtm-confusion-risks"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<strong>“So this is observability, right?”</strong>
+<ul>
+<li>Risk: buyer compares only to logging/monitoring tools and underprices value.</li>
+</ul>
+</li>
+<li>
+<strong>“So this is security scanning?”</strong>
+<ul>
+<li>Risk: buyer expects jailbreak detection and misses identity/proof/policy scope.</li>
+</ul>
+</li>
+<li>
+<strong>“So this is a crypto marketplace?”</strong>
+<ul>
+<li>Risk: enterprise committee disengages before technical evaluation.</li>
+</ul>
+</li>
+<li>
+<strong>“So this is middleware with no owner?”</strong>
+<ul>
+<li>Risk: budget orphaning; no function feels accountable to buy.</li>
+</ul>
+</li>
+</ol>
+<div class="markdown-heading"><h3 class="heading-element">Countermeasure</h3><a id="user-content-countermeasure" class="anchor" aria-label="Permalink: Countermeasure" href="#countermeasure"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>Use one crisp category claim in enterprise motion:</p>
+<blockquote>
+<p><strong>ATEL = Agent Trust Control Plane</strong>
+(identity, policy enforcement, tamper-evident execution proof, and audit-ready evidence across agent workflows)</p>
+</blockquote>
+<p>Anything beyond that should support, not dilute, the core narrative.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">5) ICP, non-buyer, and anti-ICP sharpened</h2><a id="user-content-5-icp-non-buyer-and-anti-icp-sharpened" class="anchor" aria-label="Permalink: 5) ICP, non-buyer, and anti-ICP sharpened" href="#5-icp-non-buyer-and-anti-icp-sharpened"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h2 class="heading-element">5.1 Primary ICP (near-term)</h2><a id="user-content-51-primary-icp-near-term" class="anchor" aria-label="Permalink: 5.1 Primary ICP (near-term)" href="#51-primary-icp-near-term"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p><strong>Organizations already running or about to run multi-agent workflows where errors are expensive and accountability matters.</strong></p>
+<p>Minimum traits:</p>
+<ul>
+<li>Production or near-production agent workflows</li>
+<li>Cross-team dependency (engineering + security/compliance)</li>
+<li>Real incident/audit burden</li>
+<li>Internal owner with budget influence</li>
+</ul>
+<div class="markdown-heading"><h2 class="heading-element">5.2 Secondary ICP</h2><a id="user-content-52-secondary-icp" class="anchor" aria-label="Permalink: 5.2 Secondary ICP" href="#52-secondary-icp"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>AI consultancies/SIs delivering regulated enterprise deployments</li>
+<li>Platform vendors that need embedded trust/evidence primitives</li>
+<li>Governance-heavy enterprises standardizing AI controls org-wide</li>
+</ul>
+<div class="markdown-heading"><h2 class="heading-element">5.3 Anti-ICP / non-buyer (explicit disqualifiers)</h2><a id="user-content-53-anti-icp--non-buyer-explicit-disqualifiers" class="anchor" aria-label="Permalink: 5.3 Anti-ICP / non-buyer (explicit disqualifiers)" href="#53-anti-icp--non-buyer-explicit-disqualifiers"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>Do not spend expensive sales cycles on:</p>
+<ol>
+<li>
+<strong>“Just exploring AI” teams</strong> without production timeline</li>
+<li>
+<strong>Single-agent, low-risk internal automations</strong> with no audit exposure</li>
+<li>
+<strong>Price-first buyers</strong> looking for cheapest monitoring add-on</li>
+<li><strong>Teams wanting only prompt/LLM attack filtering</strong></li>
+<li>
+<strong>SMB task marketplace users</strong> with low-ticket transactional needs</li>
+<li>
+<strong>Org units with no accountable exec owner</strong> (only enthusiasts)</li>
+</ol>
+<div class="markdown-heading"><h3 class="heading-element">Hard disqualification questions</h3><a id="user-content-hard-disqualification-questions" class="anchor" aria-label="Permalink: Hard disqualification questions" href="#hard-disqualification-questions"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>If two or more are “No,” deprioritize:</p>
+<ul>
+<li>Is there a named production workflow owner?</li>
+<li>Is there a known governance/security blocker today?</li>
+<li>Is there a quantified incident or audit pain?</li>
+<li>Is there budget authority within 1–2 functions?</li>
+<li>Is deployment expected within 2 quarters?</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">6) Edge cases: when enterprises want internal-only trust controls (no network/marketplace)</h2><a id="user-content-6-edge-cases-when-enterprises-want-internal-only-trust-controls-no-networkmarketplace" class="anchor" aria-label="Permalink: 6) Edge cases: when enterprises want internal-only trust controls (no network/marketplace)" href="#6-edge-cases-when-enterprises-want-internal-only-trust-controls-no-networkmarketplace"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>This is not edge in many large enterprises—it may be default.</p>
+<div class="markdown-heading"><h3 class="heading-element">Common enterprise constraints</h3><a id="user-content-common-enterprise-constraints" class="anchor" aria-label="Permalink: Common enterprise constraints" href="#common-enterprise-constraints"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>No external marketplace participation allowed</li>
+<li>No external identity/public reputation dependency allowed</li>
+<li>No external economic rails/escrow in regulated flows</li>
+<li>Strict tenant isolation, private deployment, residency controls</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Strategic implication</h3><a id="user-content-strategic-implication" class="anchor" aria-label="Permalink: Strategic implication" href="#strategic-implication"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>ATEL must support a first-class <strong>internal-only mode</strong>:</p>
+<ul>
+<li>Private registry and private trust graph</li>
+<li>On-prem/BYOC or strict single-tenant controls</li>
+<li>Enterprise key management options</li>
+<li>Audit exports without external disclosure requirements</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">GTM implication</h3><a id="user-content-gtm-implication" class="anchor" aria-label="Permalink: GTM implication" href="#gtm-implication"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>Do not frame “network effects” as required for value in enterprise sales.
+Frame external network participation as <strong>optional extension</strong>, not baseline architecture.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">7) Product packaging and pricing (practical)</h2><a id="user-content-7-product-packaging-and-pricing-practical" class="anchor" aria-label="Permalink: 7) Product packaging and pricing (practical)" href="#7-product-packaging-and-pricing-practical"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h2 class="heading-element">7.1 Packaging stack</h2><a id="user-content-71-packaging-stack" class="anchor" aria-label="Permalink: 7.1 Packaging stack" href="#71-packaging-stack"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<strong>SDK / open trust primitives</strong> (adoption wedge)</li>
+<li>
+<strong>Control Plane SaaS</strong> (core recurring revenue)</li>
+<li>
+<strong>Enterprise Trust Pack</strong> (IAM, audit controls, private deployment options, support/SLA)</li>
+<li>
+<strong>Compliance Evidence Pack</strong> (framework-mapped exports/workflows)</li>
+<li>
+<strong>Services accelerator</strong> (time-boxed onboarding/hardening)</li>
+</ol>
+<div class="markdown-heading"><h2 class="heading-element">7.2 Pricing logic</h2><a id="user-content-72-pricing-logic" class="anchor" aria-label="Permalink: 7.2 Pricing logic" href="#72-pricing-logic"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<strong>Anchor on avoided risk + operational savings</strong>, not feature count.</li>
+<li>Monetize with: base platform fee + usage metric (workflows/proofs/events) + enterprise/security add-ons.</li>
+<li>Keep marketplace commissions as optional, non-core line item until substantial liquidity exists.</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">8) Stronger proof-package required before serious scaling</h2><a id="user-content-8-stronger-proof-package-required-before-serious-scaling" class="anchor" aria-label="Permalink: 8) Stronger proof-package required before serious scaling" href="#8-stronger-proof-package-required-before-serious-scaling"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>ATEL should not run broad outbound or hire heavily into sales until this proof package is in place.</p>
+<div class="markdown-heading"><h2 class="heading-element">8.1 Minimum proof gate (must-have)</h2><a id="user-content-81-minimum-proof-gate-must-have" class="anchor" aria-label="Permalink: 8.1 Minimum proof gate (must-have)" href="#81-minimum-proof-gate-must-have"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<strong>3 named design partners</strong> in active production-like pilots</li>
+<li>
+<strong>2 paid conversions</strong> (not only free pilots)</li>
+<li>
+<strong>1 publishable case study</strong> with quantified before/after outcomes</li>
+<li>
+<strong>Security readiness dossier</strong> (architecture, controls, roadmap dates; SOC2 trajectory credible)</li>
+<li>
+<strong>Reliability/SLO disclosure</strong> for core APIs and verification paths</li>
+<li>
+<strong>Data consistency integrity</strong> across dashboards and APIs</li>
+<li>
+<strong>Reference integration quality</strong> for top frameworks</li>
+<li>
+<strong>Evidence exports mapped</strong> to NIST/ISO/EU logging expectations</li>
+</ol>
+<div class="markdown-heading"><h2 class="heading-element">8.2 Expansion gate (before scaling AE headcount)</h2><a id="user-content-82-expansion-gate-before-scaling-ae-headcount" class="anchor" aria-label="Permalink: 8.2 Expansion gate (before scaling AE headcount)" href="#82-expansion-gate-before-scaling-ae-headcount"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Repeatable 90-day pilot-to-paid motion</li>
+<li>Win/loss pattern clarity by segment</li>
+<li>Gross retention signal from early paid logos</li>
+<li>Procurement/security pass rate improving quarter over quarter</li>
+</ul>
+<p>If these are missing, scaling sales mostly scales disappointment.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">9) Sequencing decision framework: sell now vs harden now</h2><a id="user-content-9-sequencing-decision-framework-sell-now-vs-harden-now" class="anchor" aria-label="Permalink: 9) Sequencing decision framework: sell now vs harden now" href="#9-sequencing-decision-framework-sell-now-vs-harden-now"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>This is the operational decision tool leadership should use monthly.</p>
+<div class="markdown-heading"><h2 class="heading-element">9.1 Scoring dimensions (0–5 each)</h2><a id="user-content-91-scoring-dimensions-05-each" class="anchor" aria-label="Permalink: 9.1 Scoring dimensions (0–5 each)" href="#91-scoring-dimensions-05-each"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<strong>R (Readiness):</strong> product reliability, security posture, enterprise features</li>
+<li>
+<strong>P (Proof):</strong> real customer outcomes and references</li>
+<li>
+<strong>D (Demand):</strong> qualified pipeline with real pain and budget</li>
+<li>
+<strong>C (Clarity):</strong> positioning consistency and buyer understanding</li>
+</ul>
+<p>Compute:</p>
+<ul>
+<li><strong>Go-to-scale score = (R + P + D + C) / 4</strong></li>
+</ul>
+<div class="markdown-heading"><h2 class="heading-element">9.2 Decision thresholds</h2><a id="user-content-92-decision-thresholds" class="anchor" aria-label="Permalink: 9.2 Decision thresholds" href="#92-decision-thresholds"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<strong>&gt;= 4.0:</strong> accelerate sales hiring and outbound</li>
+<li>
+<strong>3.0–3.9:</strong> controlled growth (founder-led + selective AE support)</li>
+<li>
+<strong>&lt; 3.0:</strong> prioritize product hardening and proof creation before scale</li>
+</ul>
+<div class="markdown-heading"><h2 class="heading-element">9.3 Immediate recommended state (based on current signals)</h2><a id="user-content-93-immediate-recommended-state-based-on-current-signals" class="anchor" aria-label="Permalink: 9.3 Immediate recommended state (based on current signals)" href="#93-immediate-recommended-state-based-on-current-signals"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>R: ~2.5–3.0</li>
+<li>P: ~1.5–2.0</li>
+<li>D: ~2.0–2.5</li>
+<li>C: ~2.0–2.5</li>
+<li>Composite: <strong>~2.1–2.5</strong>
+</li>
+</ul>
+<p><strong>Conclusion:</strong> not ready for aggressive sales scale. Maintain targeted selling while hardening product and proof assets.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">10) 90-day execution plan (skeptical, board-usable)</h2><a id="user-content-10-90-day-execution-plan-skeptical-board-usable" class="anchor" aria-label="Permalink: 10) 90-day execution plan (skeptical, board-usable)" href="#10-90-day-execution-plan-skeptical-board-usable"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h2 class="heading-element">Phase 1 (Days 0–30): Message discipline + trust readiness baseline</h2><a id="user-content-phase-1-days-030-message-discipline--trust-readiness-baseline" class="anchor" aria-label="Permalink: Phase 1 (Days 0–30): Message discipline + trust readiness baseline" href="#phase-1-days-030-message-discipline--trust-readiness-baseline"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Lock single narrative: <strong>Agent Trust Control Plane</strong>
+</li>
+<li>Publish architecture/security package for buyer committees</li>
+<li>Remove documentation inconsistencies that reduce credibility</li>
+<li>Define 3 pilot success metrics every deal must use</li>
+</ul>
+<p><strong>Exit criteria:</strong></p>
+<ul>
+<li>Sales deck, security brief, and technical whitepaper aligned</li>
+<li>Pilot scorecard template operational</li>
+</ul>
+<div class="markdown-heading"><h2 class="heading-element">Phase 2 (Days 31–60): Design-partner conversion</h2><a id="user-content-phase-2-days-3160-design-partner-conversion" class="anchor" aria-label="Permalink: Phase 2 (Days 31–60): Design-partner conversion" href="#phase-2-days-3160-design-partner-conversion"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Focus outbound on 25–40 high-fit accounts only</li>
+<li>Close 3 production-relevant pilots with explicit success criteria</li>
+<li>Launch at least 2 “internal-only mode” pilots (to validate enterprise edge case demand)</li>
+</ul>
+<p><strong>Exit criteria:</strong></p>
+<ul>
+<li>3 active pilots; all have baseline metrics captured</li>
+<li>At least 1 pilot in regulated or governance-heavy context</li>
+</ul>
+<div class="markdown-heading"><h2 class="heading-element">Phase 3 (Days 61–90): Proof capture and commercialization</h2><a id="user-content-phase-3-days-6190-proof-capture-and-commercialization" class="anchor" aria-label="Permalink: Phase 3 (Days 61–90): Proof capture and commercialization" href="#phase-3-days-6190-proof-capture-and-commercialization"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Convert minimum 2 pilots to paid agreements</li>
+<li>Produce one board-quality case study with quantified outcomes</li>
+<li>Decision checkpoint: pass/fail on minimum proof gate</li>
+</ul>
+<p><strong>Exit criteria:</strong></p>
+<ul>
+<li>Either (A) pass gate and plan measured GTM expansion, or (B) fail gate and redirect resources to hardening</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">11) Key risks and mitigations</h2><a id="user-content-11-key-risks-and-mitigations" class="anchor" aria-label="Permalink: 11) Key risks and mitigations" href="#11-key-risks-and-mitigations"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<p><strong>Narrative split risk (marketplace vs enterprise control plane)</strong></p>
+<ul>
+<li>Mitigation: separate product optionality from core GTM story.</li>
+</ul>
+</li>
+<li>
+<p><strong>Security/procurement stall risk</strong></p>
+<ul>
+<li>Mitigation: front-load security package and deployment options.</li>
+</ul>
+</li>
+<li>
+<p><strong>Category misclassification risk</strong></p>
+<ul>
+<li>Mitigation: repeated category framing and competitor-context battlecards.</li>
+</ul>
+</li>
+<li>
+<p><strong>Pilot purgatory risk</strong></p>
+<ul>
+<li>Mitigation: strict pilot contracts with success metrics, executive sponsor, conversion terms.</li>
+</ul>
+</li>
+<li>
+<p><strong>Overbuilding for hypothetical network effects</strong></p>
+<ul>
+<li>Mitigation: prioritize internal-only enterprise value until external liquidity is proven.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">12) Board-level KPI dashboard (what to track monthly)</h2><a id="user-content-12-board-level-kpi-dashboard-what-to-track-monthly" class="anchor" aria-label="Permalink: 12) Board-level KPI dashboard (what to track monthly)" href="#12-board-level-kpi-dashboard-what-to-track-monthly"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Qualified pipeline in ICP accounts (count + value)</li>
+<li>Pilot-to-paid conversion rate</li>
+<li>Median time to first value in pilot</li>
+<li>Security/procurement pass rate</li>
+<li>Evidence package adoption (how often used in deals)</li>
+<li>Incident/audit outcome metrics from active customers</li>
+<li>Net revenue contribution by packaging line (platform, enterprise pack, services, marketplace)</li>
+</ul>
+<p>If marketplace contribution is low and control-plane revenue grows, that is not a failure; it validates strategy.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">Bottom line</h2><a id="user-content-bottom-line" class="anchor" aria-label="Permalink: Bottom line" href="#bottom-line"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>ATEL likely has a defensible product wedge, but not yet a defensible <strong>scaled GTM machine</strong>.</p>
+<p>The highest-probability path is:</p>
+<ul>
+<li><strong>Sell accountability and trust controls to enterprises now</strong></li>
+<li><strong>Prove measurable outcomes quickly</strong></li>
+<li><strong>Harden enterprise readiness in parallel</strong></li>
+<li>
+<strong>Treat marketplace as optional upside, not core thesis</strong> until liquidity and buyer pull are real</li>
+</ul>
+<p>This is the practical path from “interesting technology” to repeatable enterprise revenue.</p>
+</div></body></html>

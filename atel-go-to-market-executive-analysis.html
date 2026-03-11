@@ -1,0 +1,387 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Atel Go To Market Executive Analysis</title><style>
+body{font-family:Inter,system-ui,-apple-system,sans-serif;max-width:980px;margin:40px auto;padding:0 20px;line-height:1.6;color:#111;background:#fafafa}
+a{color:#0b57d0;text-decoration:none} a:hover{text-decoration:underline}
+.card{background:white;border:1px solid #e5e7eb;border-radius:16px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.03)}
+pre{white-space:pre-wrap;word-break:break-word;background:#f6f8fa;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f4f6;padding:2px 6px;border-radius:6px}
+ul{padding-left:22px} li{margin:8px 0}.muted{color:#666}.top{margin-bottom:20px}
+</style></head><body><div class="top"><a href="../index.html">← Back to index</a></div><div class="card"><h1>Atel Go To Market Executive Analysis</h1><p class="muted"><a href="./reports/atel-go-to-market-executive-analysis.md">Download raw markdown</a></p><div class="markdown-heading"><h1 class="heading-element">ATEL Go-to-Market Executive Analysis</h1><a id="user-content-atel-go-to-market-executive-analysis" class="anchor" aria-label="Permalink: ATEL Go-to-Market Executive Analysis" href="#atel-go-to-market-executive-analysis"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p><em>Date: 2026-03-10/11 (CDT)</em></p>
+<div class="markdown-heading"><h2 class="heading-element">Evidence base used</h2><a id="user-content-evidence-base-used" class="anchor" aria-label="Permalink: Evidence base used" href="#evidence-base-used"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Local code/docs from <code>atel-sdk-main</code> and <code>atel-portal-master</code>
+</li>
+<li>Live platform/API spot checks (<code>api.atelai.org</code>) including <code>/health</code>, <code>/registry/v1/stats</code>, <code>/registry/v1/search</code>, <code>/trade/v1/marketplace</code>, <code>/trade/v1/offers</code>
+</li>
+<li>External market signals from NIST AI RMF, EU AI Act Article 12, ISO/IEC 42001, LangSmith/Arize/Lakera/Protect AI/Credo/Fiddler positioning pages, MCP and A2A announcements</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">1) Executive summary</h2><a id="user-content-1-executive-summary" class="anchor" aria-label="Permalink: 1) Executive summary" href="#1-executive-summary"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>ATEL has a real technical wedge: <strong>verifiable agent identity + execution proof + policy controls + trust scoring + optional escrow</strong>. That combination is stronger than “just observability” and materially relevant for organizations that must answer: <em>“Can we prove what this agent did and why we trusted it?”</em></p>
+<p>The current GTM posture is split between:</p>
+<ol>
+<li>a protocol trust layer for serious teams, and</li>
+<li>an open agent marketplace/economy motion.</li>
+</ol>
+<p>Right now, the data says the marketplace motion is not mature enough to be the lead:</p>
+<ul>
+<li>Registry snapshot fetched: <strong>165 agents</strong>, but only <strong>3 online</strong>, <strong>2 verified</strong>, and <strong>152/165 are synthetic <code>did:...:mk...</code> style records</strong>.</li>
+<li>Only <strong>17 agents show non-zero task history</strong>; combined task count observed: <strong>138</strong>.</li>
+<li>Marketplace observed: <strong>4 active offers</strong>, only <strong>1 seller with meaningful orders</strong>, and <strong>1 completed order</strong> across listed offers.</li>
+</ul>
+<p><strong>Decision recommendation:</strong></p>
+<ul>
+<li>
+<strong>Lead with B2B trust/compliance infrastructure</strong>, not marketplace growth.</li>
+<li>Position ATEL as an <strong>Agent Trust Control Plane</strong> for multi-agent workflows in high-risk or regulated contexts.</li>
+<li>Keep marketplace as a testbed/demo channel until there is durable buyer-side demand and non-synthetic liquidity.</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">2) ICPs (primary, secondary, anti-ICP)</h2><a id="user-content-2-icps-primary-secondary-anti-icp" class="anchor" aria-label="Permalink: 2) ICPs (primary, secondary, anti-ICP)" href="#2-icps-primary-secondary-anti-icp"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Primary ICP (highest conversion probability)</h3><a id="user-content-primary-icp-highest-conversion-probability" class="anchor" aria-label="Permalink: Primary ICP (highest conversion probability)" href="#primary-icp-highest-conversion-probability"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p><strong>AI platform/product teams (50–2000 employees) running agentic workflows in production where errors are expensive.</strong></p>
+<ul>
+<li>Multi-agent or multi-service orchestration already in flight</li>
+<li>Security/compliance review blocks releases</li>
+<li>Need auditable logs/proofs for internal risk and external auditors</li>
+<li>Budget owner sits in Engineering + Security + Compliance triangle</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Secondary ICP</h3><a id="user-content-secondary-icp" class="anchor" aria-label="Permalink: Secondary ICP" href="#secondary-icp"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<strong>Enterprise AI governance / model risk teams</strong> modernizing controls from static policy docs to runtime evidence.</li>
+<li>
+<strong>Systems integrators / AI consultancies</strong> delivering enterprise agent deployments and needing a trust layer to reduce delivery risk.</li>
+<li>
+<strong>Agent framework/platform vendors</strong> needing trust, execution attestations, and policy tooling as embedded infrastructure.</li>
+</ol>
+<div class="markdown-heading"><h3 class="heading-element">Anti-ICP (avoid for now)</h3><a id="user-content-anti-icp-avoid-for-now" class="anchor" aria-label="Permalink: Anti-ICP (avoid for now)" href="#anti-icp-avoid-for-now"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Solo builders and hobby agents optimizing for speed over governance</li>
+<li>Teams with single-agent, low-risk internal use cases</li>
+<li>Buyers seeking only prompt filtering/runtime jailbreak detection (Lakera/Protect AI category)</li>
+<li>Commodity freelancer marketplace users buying low-ticket tasks</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">3) Buyer personas and who actually feels the pain</h2><a id="user-content-3-buyer-personas-and-who-actually-feels-the-pain" class="anchor" aria-label="Permalink: 3) Buyer personas and who actually feels the pain" href="#3-buyer-personas-and-who-actually-feels-the-pain"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Economic buyer</h3><a id="user-content-economic-buyer" class="anchor" aria-label="Permalink: Economic buyer" href="#economic-buyer"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li><strong>CTO / VP Engineering / Head of AI Platform</strong></li>
+<li>Pain: production reliability risk, cost of incidents, inability to scale agent deployments safely</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Security/risk co-buyer (often veto power)</h3><a id="user-content-securityrisk-co-buyer-often-veto-power" class="anchor" aria-label="Permalink: Security/risk co-buyer (often veto power)" href="#securityrisk-co-buyer-often-veto-power"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li><strong>CISO / Director of AI Governance / Model Risk Lead</strong></li>
+<li>Pain: no defensible audit trail, weak policy enforcement, unclear accountability</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Technical champion</h3><a id="user-content-technical-champion" class="anchor" aria-label="Permalink: Technical champion" href="#technical-champion"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li><strong>Staff/Principal AI Engineer, Platform Engineer, MLOps/LLMOps Lead</strong></li>
+<li>Pain: difficult debugging across agent chains, no proof integrity, brittle ad-hoc controls</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Operational pain owner (feels it first)</h3><a id="user-content-operational-pain-owner-feels-it-first" class="anchor" aria-label="Permalink: Operational pain owner (feels it first)" href="#operational-pain-owner-feels-it-first"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li><strong>On-call AI platform team + compliance operations</strong></li>
+<li>They absorb incident handling and audit burden when agents misbehave</li>
+</ul>
+<p><strong>Who feels pain most acutely:</strong> platform engineers and risk/compliance teams during incident response and audit prep.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">4) Pain points and buying triggers</h2><a id="user-content-4-pain-points-and-buying-triggers" class="anchor" aria-label="Permalink: 4) Pain points and buying triggers" href="#4-pain-points-and-buying-triggers"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Core pain points</h3><a id="user-content-core-pain-points" class="anchor" aria-label="Permalink: Core pain points" href="#core-pain-points"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>No cryptographically strong identity between collaborating agents</li>
+<li>No tamper-evident execution history for dispute/regulatory review</li>
+<li>Policy controls are fragmented and hard to enforce consistently</li>
+<li>Cross-org agent collaboration has no trust baseline</li>
+<li>Manual governance workflow (spreadsheets + screenshots) does not scale</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Buying triggers (what creates budget urgency)</h3><a id="user-content-buying-triggers-what-creates-budget-urgency" class="anchor" aria-label="Permalink: Buying triggers (what creates budget urgency)" href="#buying-triggers-what-creates-budget-urgency"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Failed/unsafe autonomous action in production</li>
+<li>Internal audit finding (“cannot evidence controls”)</li>
+<li>Procurement/security review blocks launch</li>
+<li>New regulatory pressure (EU AI Act logging/traceability expectations, NIST AI RMF adoption, ISO 42001 programs)</li>
+<li>Expansion from pilot to production where legal/compliance now involved</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">5) Product packaging hypotheses</h2><a id="user-content-5-product-packaging-hypotheses" class="anchor" aria-label="Permalink: 5) Product packaging hypotheses" href="#5-product-packaging-hypotheses"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">A) SDK (open-core trust primitives)</h3><a id="user-content-a-sdk-open-core-trust-primitives" class="anchor" aria-label="Permalink: A) SDK (open-core trust primitives)" href="#a-sdk-open-core-trust-primitives"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>DID identity, trace, proof, policy, trust scoring, anchor modules</li>
+<li>Objective: developer adoption + ecosystem embedding</li>
+<li>Keep free and friction-light</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">B) Platform (hosted trust control plane)</h3><a id="user-content-b-platform-hosted-trust-control-plane" class="anchor" aria-label="Permalink: B) Platform (hosted trust control plane)" href="#b-platform-hosted-trust-control-plane"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Registry, verification services, dashboards, policy orchestration, trust analytics</li>
+<li>Objective: recurring SaaS revenue</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">C) Managed service (implementation + operations)</h3><a id="user-content-c-managed-service-implementation--operations" class="anchor" aria-label="Permalink: C) Managed service (implementation + operations)" href="#c-managed-service-implementation--operations"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Architecture review, policy tuning, integration support, runbooks</li>
+<li>Objective: accelerate enterprise conversion and reduce time-to-value</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">D) Compliance evidence layer (new packaging wedge)</h3><a id="user-content-d-compliance-evidence-layer-new-packaging-wedge" class="anchor" aria-label="Permalink: D) Compliance evidence layer (new packaging wedge)" href="#d-compliance-evidence-layer-new-packaging-wedge"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Exportable evidence packs mapped to frameworks (EU AI Act/NIST/ISO/SOC2 controls)</li>
+<li>Objective: sell to governance/risk budget, not just engineering budget</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">E) Enterprise offering</h3><a id="user-content-e-enterprise-offering" class="anchor" aria-label="Permalink: E) Enterprise offering" href="#e-enterprise-offering"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>BYOC/self-hosted, SSO/RBAC, audit logs, SLA, premium support, data residency</li>
+<li>Objective: unlock regulated and large accounts</li>
+</ul>
+<p><strong>Packaging call:</strong> make SDK the top-of-funnel, but monetize via platform + compliance + enterprise controls.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">6) Pricing and monetization options</h2><a id="user-content-6-pricing-and-monetization-options" class="anchor" aria-label="Permalink: 6) Pricing and monetization options" href="#6-pricing-and-monetization-options"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>Current monetization in ATEL (commission tiers, certification fees, boosts) is coherent for a marketplace but weakly aligned with enterprise software buying behavior.</p>
+<div class="markdown-heading"><h3 class="heading-element">Recommended monetization stack</h3><a id="user-content-recommended-monetization-stack" class="anchor" aria-label="Permalink: Recommended monetization stack" href="#recommended-monetization-stack"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li><strong>Developer tier (PLG)</strong></li>
+</ol>
+<ul>
+<li>Free usage cap (e.g., proofs/month, active workflows, retention window)</li>
+<li>Goal: remove adoption friction</li>
+</ul>
+<ol start="2">
+<li><strong>Team tier (self-serve)</strong></li>
+</ol>
+<ul>
+<li>Hybrid: platform fee + usage (proof volume / workflows / monitored agents)</li>
+<li>Comparable market signals: LangSmith/Arize both blend base plans with usage-based expansions</li>
+</ul>
+<ol start="3">
+<li><strong>Enterprise tier (sales-led)</strong></li>
+</ol>
+<ul>
+<li>Annual contract + committed usage + security/compliance pack</li>
+<li>Add-ons: self-hosted/BYOC, advanced policy packs, premium support</li>
+</ul>
+<ol start="4">
+<li><strong>Services revenue (high-margin accelerator early)</strong></li>
+</ol>
+<ul>
+<li>Fixed-fee onboarding package + architecture hardening</li>
+</ul>
+<ol start="5">
+<li><strong>Optional transaction rails (later, not lead)</strong></li>
+</ol>
+<ul>
+<li>Keep escrow/commission model for specific partner ecosystems, not core enterprise pricing anchor</li>
+</ul>
+<p><strong>Pricing strategy recommendation:</strong> sell “risk reduction and audit readiness,” not just “agent transactions.”</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">7) Sales motion recommendation (PLG, founder-led, enterprise, ecosystem, partnerships)</h2><a id="user-content-7-sales-motion-recommendation-plg-founder-led-enterprise-ecosystem-partnerships" class="anchor" aria-label="Permalink: 7) Sales motion recommendation (PLG, founder-led, enterprise, ecosystem, partnerships)" href="#7-sales-motion-recommendation-plg-founder-led-enterprise-ecosystem-partnerships"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Recommended mix</h3><a id="user-content-recommended-mix" class="anchor" aria-label="Permalink: Recommended mix" href="#recommended-mix"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<strong>Primary now:</strong> Founder-led + enterprise design-partner selling</li>
+<li>
+<strong>Secondary:</strong> PLG via SDK/docs/quickstart</li>
+<li>
+<strong>Parallel:</strong> ecosystem integrations (LangChain, OpenAI Agents, MCP/A2A-compatible stacks)</li>
+<li>
+<strong>Targeted partnerships:</strong> AI consultancies + compliance advisory firms</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Why</h3><a id="user-content-why" class="anchor" aria-label="Permalink: Why" href="#why"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Product category is still being defined; founder story and direct problem shaping are critical</li>
+<li>Technical teams will try SDK first, but budget unlock requires executive/security narrative</li>
+<li>Interop trend (MCP + A2A) creates integration surface where ATEL can be “trust layer on top”</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">What to avoid right now</h3><a id="user-content-what-to-avoid-right-now" class="anchor" aria-label="Permalink: What to avoid right now" href="#what-to-avoid-right-now"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Broad “open marketplace growth” campaigns</li>
+<li>Heavy paid acquisition before proof of repeatable enterprise conversion</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">8) Beachhead markets and verticals</h2><a id="user-content-8-beachhead-markets-and-verticals" class="anchor" aria-label="Permalink: 8) Beachhead markets and verticals" href="#8-beachhead-markets-and-verticals"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Beachhead #1 (recommended):</h3><a id="user-content-beachhead-1-recommended" class="anchor" aria-label="Permalink: Beachhead #1 (recommended):" href="#beachhead-1-recommended"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p><strong>Financial services / fintech AI operations</strong></p>
+<ul>
+<li>High sensitivity to auditability, fraud, accountability</li>
+<li>Strong fit with execution proof + policy + dispute logic</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Beachhead #2:</h3><a id="user-content-beachhead-2" class="anchor" aria-label="Permalink: Beachhead #2:" href="#beachhead-2"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p><strong>Enterprise IT/service operations with agentic automation</strong></p>
+<ul>
+<li>Multi-step workflows, approvals, escalation requirements</li>
+<li>Clear ROI from incident reduction and forensics speed</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Beachhead #3:</h3><a id="user-content-beachhead-3" class="anchor" aria-label="Permalink: Beachhead #3:" href="#beachhead-3"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p><strong>Healthcare admin and life sciences knowledge workflows (non-diagnostic first)</strong></p>
+<ul>
+<li>Documentation burden and governance requirements</li>
+<li>Needs enterprise compliance posture before aggressive push</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Cross-vertical wedge alternative</h3><a id="user-content-cross-vertical-wedge-alternative" class="anchor" aria-label="Permalink: Cross-vertical wedge alternative" href="#cross-vertical-wedge-alternative"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>Instead of industry-first, go <strong>persona-first</strong>: “AI platform teams shipping multi-agent workflows in regulated environments.”</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">9) Messaging / positioning options</h2><a id="user-content-9-messaging--positioning-options" class="anchor" aria-label="Permalink: 9) Messaging / positioning options" href="#9-messaging--positioning-options"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Positioning option A (recommended)</h3><a id="user-content-positioning-option-a-recommended" class="anchor" aria-label="Permalink: Positioning option A (recommended)" href="#positioning-option-a-recommended"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p><strong>“ATEL is the trust control plane for autonomous AI.”</strong></p>
+<ul>
+<li>Emphasize identity, policy, evidence, and verification</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Positioning option B</h3><a id="user-content-positioning-option-b" class="anchor" aria-label="Permalink: Positioning option B" href="#positioning-option-b"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p><strong>“Execution-proof infrastructure for agentic systems.”</strong></p>
+<ul>
+<li>Strong for technical/security audiences</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Positioning option C</h3><a id="user-content-positioning-option-c" class="anchor" aria-label="Permalink: Positioning option C" href="#positioning-option-c"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p><strong>“The missing governance layer for MCP/A2A ecosystems.”</strong></p>
+<ul>
+<li>Strong ecosystem story; leverage interoperability momentum</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Messaging principles</h3><a id="user-content-messaging-principles" class="anchor" aria-label="Permalink: Messaging principles" href="#messaging-principles"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Lead with business risk outcomes: audit readiness, incident containment, accountable automation</li>
+<li>Avoid over-indexing on crypto language in enterprise contexts</li>
+<li>Keep “on-chain anchoring” as optional trust primitive, not the headline for conservative buyers</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">10) Proof points the product needs before serious selling</h2><a id="user-content-10-proof-points-the-product-needs-before-serious-selling" class="anchor" aria-label="Permalink: 10) Proof points the product needs before serious selling" href="#10-proof-points-the-product-needs-before-serious-selling"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>Before scaling outbound sales, ATEL needs a tighter proof package:</p>
+<ol>
+<li>
+<strong>3–5 named production design partners</strong> with measurable outcomes</li>
+<li>
+<strong>Security/compliance baseline</strong> (at minimum SOC2 roadmap + formal security architecture docs)</li>
+<li>
+<strong>Reliability SLOs</strong> (availability, verification success rate, latency budgets)</li>
+<li>
+<strong>Data integrity consistency</strong> between APIs/stats/dashboards (current mismatches hurt credibility)</li>
+<li>
+<strong>Reference integrations</strong> with top agent frameworks and clear migration guides</li>
+<li>
+<strong>Evidence export templates</strong> mapped to NIST AI RMF / ISO 42001 / EU AI Act logging expectations</li>
+<li>
+<strong>Commercial proof</strong>: repeatable paid contract motion (not just experimental marketplace activity)</li>
+</ol>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">11) GTM strengths</h2><a id="user-content-11-gtm-strengths" class="anchor" aria-label="Permalink: 11) GTM strengths" href="#11-gtm-strengths"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Clear and differentiated technical narrative (identity + proof + policy + trust)</li>
+<li>Working product surface, not just slides (SDK, CLI, portal, live APIs)</li>
+<li>Multi-chain anchoring and dispute/escrow support demonstrate end-to-end thinking</li>
+<li>Strong developer entry point (CLI, quickstart, protocol docs)</li>
+<li>Category tailwinds: organizations now actively standardizing AI risk/governance practices</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">12) GTM weaknesses / risks</h2><a id="user-content-12-gtm-weaknesses--risks" class="anchor" aria-label="Permalink: 12) GTM weaknesses / risks" href="#12-gtm-weaknesses--risks"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Marketplace metrics suggest <strong>early, synthetic, and low-liquidity network state</strong>
+</li>
+<li>Positioning split: enterprise governance story vs open marketplace economics story</li>
+<li>Documentation and packaging inconsistencies (version/package naming/test counts/auth descriptions) reduce buyer trust</li>
+<li>Enterprise trust blockers still likely unresolved (formal compliance posture, mature admin controls, procurement readiness)</li>
+<li>Potential narrative collision with established observability/security incumbents unless differentiation is explicit</li>
+<li>Risk of becoming “interesting protocol, unclear budget owner” if value not tied to measurable business outcomes</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">13) 90-day GTM plan</h2><a id="user-content-13-90-day-gtm-plan" class="anchor" aria-label="Permalink: 13) 90-day GTM plan" href="#13-90-day-gtm-plan"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Days 0–30: sharpen wedge + remove credibility friction</h3><a id="user-content-days-030-sharpen-wedge--remove-credibility-friction" class="anchor" aria-label="Permalink: Days 0–30: sharpen wedge + remove credibility friction" href="#days-030-sharpen-wedge--remove-credibility-friction"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Finalize ICP and single narrative: <strong>Agent Trust Control Plane</strong>
+</li>
+<li>Build enterprise pitch + security one-pager + architecture diagram</li>
+<li>Clean docs inconsistencies and publish authoritative product/version matrix</li>
+<li>Define pilot success metrics and ROI calculator</li>
+</ul>
+<p><strong>Targets:</strong></p>
+<ul>
+<li>1 messaging framework locked</li>
+<li>10 qualified target accounts list</li>
+<li>0 critical docs inconsistencies in top onboarding path</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Days 31–60: design partner pipeline</h3><a id="user-content-days-3160-design-partner-pipeline" class="anchor" aria-label="Permalink: Days 31–60: design partner pipeline" href="#days-3160-design-partner-pipeline"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Run founder-led outreach to 30 accounts; secure 5 serious pilot discussions</li>
+<li>Close 2–3 design partners with explicit problem statements</li>
+<li>Ship integration accelerators for top frameworks (MCP/A2A context included)</li>
+</ul>
+<p><strong>Targets:</strong></p>
+<ul>
+<li>3 signed pilots</li>
+<li>&lt;30 days from pilot kickoff to first measurable value</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Days 61–90: convert pilots into paid references</h3><a id="user-content-days-6190-convert-pilots-into-paid-references" class="anchor" aria-label="Permalink: Days 61–90: convert pilots into paid references" href="#days-6190-convert-pilots-into-paid-references"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Turn 1–2 pilots into paid annual contracts</li>
+<li>Publish at least 1 case study with concrete outcomes (incident response time, audit prep time, control coverage)</li>
+<li>Launch lightweight partner program (2 consulting/SI partners)</li>
+</ul>
+<p><strong>Targets:</strong></p>
+<ul>
+<li>2 paid logos</li>
+<li>1 publishable customer proof</li>
+<li>repeatable pilot-to-paid playbook v1</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">14) 12-month GTM path</h2><a id="user-content-14-12-month-gtm-path" class="anchor" aria-label="Permalink: 14) 12-month GTM path" href="#14-12-month-gtm-path"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Q2 (months 1–3): category definition + first paid proofs</h3><a id="user-content-q2-months-13-category-definition--first-paid-proofs" class="anchor" aria-label="Permalink: Q2 (months 1–3): category definition + first paid proofs" href="#q2-months-13-category-definition--first-paid-proofs"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Secure early paid design-partner wins</li>
+<li>Establish category language and narrative consistency</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Q3 (months 4–6): enterprise readiness hardening</h3><a id="user-content-q3-months-46-enterprise-readiness-hardening" class="anchor" aria-label="Permalink: Q3 (months 4–6): enterprise readiness hardening" href="#q3-months-46-enterprise-readiness-hardening"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Security/compliance milestones, SLA commitments, role-based controls</li>
+<li>Expand outbound to vertical-specific plays</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Q4 (months 7–9): scale go-to-market channels</h3><a id="user-content-q4-months-79-scale-go-to-market-channels" class="anchor" aria-label="Permalink: Q4 (months 7–9): scale go-to-market channels" href="#q4-months-79-scale-go-to-market-channels"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Add dedicated AE/SE coverage</li>
+<li>Broaden partner channel and co-sell motions</li>
+<li>Publish 3–5 high-quality references</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Q1 next year (months 10–12): platformization and expansion</h3><a id="user-content-q1-next-year-months-1012-platformization-and-expansion" class="anchor" aria-label="Permalink: Q1 next year (months 10–12): platformization and expansion" href="#q1-next-year-months-1012-platformization-and-expansion"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Expand from point use-cases to org-wide trust governance deployments</li>
+<li>Launch policy/compliance packs as premium SKU</li>
+<li>Evaluate when (or if) marketplace deserves growth budget</li>
+</ul>
+<p><strong>12-month objective:</strong> establish ATEL as a default trust/evidence layer for enterprise agent operations, with marketplace optional rather than core dependency.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">15) Executive bullets: pros, cons, strengths, weaknesses, opportunities, threats</h2><a id="user-content-15-executive-bullets-pros-cons-strengths-weaknesses-opportunities-threats" class="anchor" aria-label="Permalink: 15) Executive bullets: pros, cons, strengths, weaknesses, opportunities, threats" href="#15-executive-bullets-pros-cons-strengths-weaknesses-opportunities-threats"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Pros</h3><a id="user-content-pros" class="anchor" aria-label="Permalink: Pros" href="#pros"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Strong technical differentiation with verifiable trust mechanics</li>
+<li>Real product implementation already available</li>
+<li>Good strategic timing as AI governance pressure rises</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Cons</h3><a id="user-content-cons" class="anchor" aria-label="Permalink: Cons" href="#cons"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Current commercial traction appears early and low-signal</li>
+<li>GTM story split across two motions (infra vs marketplace)</li>
+<li>Enterprise credibility gaps still visible</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Strengths</h3><a id="user-content-strengths" class="anchor" aria-label="Permalink: Strengths" href="#strengths"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>End-to-end trust stack (identity → policy → proof → score)</li>
+<li>Developer-first distribution path</li>
+<li>Emerging ecosystem interoperability tailwinds</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Weaknesses</h3><a id="user-content-weaknesses" class="anchor" aria-label="Permalink: Weaknesses" href="#weaknesses"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Data quality and consistency issues in observable network metrics</li>
+<li>Early-stage ecosystem liquidity</li>
+<li>Limited demonstrated enterprise references</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Opportunities</h3><a id="user-content-opportunities" class="anchor" aria-label="Permalink: Opportunities" href="#opportunities"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Become the trust/evidence layer for MCP/A2A multi-agent stacks</li>
+<li>Sell into compliance and risk budgets, not only dev tool budgets</li>
+<li>Partner-led expansion via AI integrators and governance advisors</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Threats</h3><a id="user-content-threats" class="anchor" aria-label="Permalink: Threats" href="#threats"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Incumbents in observability/security expanding into governance controls</li>
+<li>Market confusion if category framing is not precise</li>
+<li>Long enterprise sales cycles without near-term reference wins</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">Bottom-line recommendation</h2><a id="user-content-bottom-line-recommendation" class="anchor" aria-label="Permalink: Bottom-line recommendation" href="#bottom-line-recommendation"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p><strong>Do not lead with “agent marketplace” as the company story in the next 6–12 months.</strong>
+Lead with <strong>enterprise trust governance and execution proof for agentic systems</strong>, use SDK-led PLG for technical adoption, and close founder-led design partners in regulated/high-stakes workflows. That path gives ATEL the highest chance of turning real technical differentiation into repeatable revenue.</p>
+</div></body></html>

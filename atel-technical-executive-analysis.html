@@ -1,0 +1,277 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Atel Technical Executive Analysis</title><style>
+body{font-family:Inter,system-ui,-apple-system,sans-serif;max-width:980px;margin:40px auto;padding:0 20px;line-height:1.6;color:#111;background:#fafafa}
+a{color:#0b57d0;text-decoration:none} a:hover{text-decoration:underline}
+.card{background:white;border:1px solid #e5e7eb;border-radius:16px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.03)}
+pre{white-space:pre-wrap;word-break:break-word;background:#f6f8fa;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f4f6;padding:2px 6px;border-radius:6px}
+ul{padding-left:22px} li{margin:8px 0}.muted{color:#666}.top{margin-bottom:20px}
+</style></head><body><div class="top"><a href="../index.html">← Back to index</a></div><div class="card"><h1>Atel Technical Executive Analysis</h1><p class="muted"><a href="./reports/atel-technical-executive-analysis.md">Download raw markdown</a></p><div class="markdown-heading"><h1 class="heading-element">Atel Technical Executive Analysis (Cross-Repo Synthesis)</h1><a id="user-content-atel-technical-executive-analysis-cross-repo-synthesis" class="anchor" aria-label="Permalink: Atel Technical Executive Analysis (Cross-Repo Synthesis)" href="#atel-technical-executive-analysis-cross-repo-synthesis"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h2 class="heading-element">1) Executive summary</h2><a id="user-content-1-executive-summary" class="anchor" aria-label="Permalink: 1) Executive summary" href="#1-executive-summary"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>Atel has the <strong>right strategic architecture for an agent economy platform</strong>: a trust protocol layer (SDK), a transaction/governance backend (Platform), and a commercial UI surface (Portal). The stack is coherent and more substantive than a typical early-stage “AI marketplace” story.</p>
+<p>However, across the three repos, Atel is best described as <strong>high-potential, pre-hardening</strong>:</p>
+<ul>
+<li>
+<strong>Strong direction</strong>: cryptographic trust primitives, escrow/dispute flows, multi-chain payment rails, and a credible operator/admin surface.</li>
+<li>
+<strong>Current constraint</strong>: integration and production discipline are not yet at enterprise-grade (schema/API drift, uneven auth defaults, missing/uneven testing and observability, quality gate gaps).</li>
+</ul>
+<p><strong>Executive decision recommendation:</strong> <strong>Invest + Harden + Controlled Pilot</strong> (do not rewrite, do not broad-scale yet).</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">2) Stack overview / what Atel appears to be as a product/company</h2><a id="user-content-2-stack-overview--what-atel-appears-to-be-as-a-productcompany" class="anchor" aria-label="Permalink: 2) Stack overview / what Atel appears to be as a product/company" href="#2-stack-overview--what-atel-appears-to-be-as-a-productcompany"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>Atel appears to be building a <strong>trust-and-commerce operating system for AI agents</strong>:</p>
+<ul>
+<li>
+<strong>Trust layer</strong>: prove what an agent did (identity, consent, trace, proof, optional chain anchoring).</li>
+<li>
+<strong>Market layer</strong>: help agents discover each other, contract, transact, and settle with platform-mediated escrow.</li>
+<li>
+<strong>Governance layer</strong>: certification, disputes, scoring, and admin controls.</li>
+<li>
+<strong>Distribution layer</strong>: a polished web portal for buyers, sellers, and operators.</li>
+</ul>
+<p>In plain business terms: Atel is trying to be the platform where agent work becomes <strong>verifiable, payable, and governable</strong>.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">3) Role of each repo in the stack</h2><a id="user-content-3-role-of-each-repo-in-the-stack" class="anchor" aria-label="Permalink: 3) Role of each repo in the stack" href="#3-role-of-each-repo-in-the-stack"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">
+<code>atel-sdk-main</code> (protocol/trust middleware)</h3><a id="user-content-atel-sdk-main-protocoltrust-middleware" class="anchor" aria-label="Permalink: atel-sdk-main (protocol/trust middleware)" href="#atel-sdk-main-protocoltrust-middleware"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Provides cryptographic and protocol primitives: DID identity, consent policy, tool-gated execution, tamper-evident traces, Merkle proof bundles, optional anchoring, trust scoring/graph modules.</li>
+<li>Technically strongest repo in architecture clarity and test depth.</li>
+<li>Role: <strong>trust fabric</strong> used by agent runtimes and (ideally) upstream platform verification workflows.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">
+<code>atel-platform-main</code> (commercial backend/system of record)</h3><a id="user-content-atel-platform-main-commercial-backendsystem-of-record" class="anchor" aria-label="Permalink: atel-platform-main (commercial backend/system of record)" href="#atel-platform-main-commercial-backendsystem-of-record"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Go/Gin backend with registry, trade/order lifecycle, escrow/settlement, payment rails, cert/boost/dispute/admin APIs.</li>
+<li>Encodes business model and monetization mechanics.</li>
+<li>Role: <strong>economic and governance core</strong> of Atel.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">
+<code>atel-portal-master</code> (presentation and operator UX)</h3><a id="user-content-atel-portal-master-presentation-and-operator-ux" class="anchor" aria-label="Permalink: atel-portal-master (presentation and operator UX)" href="#atel-portal-master-presentation-and-operator-ux"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Next.js portal for docs, marketplace, dashboard, and admin flows; calls platform API directly.</li>
+<li>Strong product narrative and broad UX footprint.</li>
+<li>Role: <strong>go-to-market and operations front door</strong>.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">How they fit together (intended flow)</h3><a id="user-content-how-they-fit-together-intended-flow" class="anchor" aria-label="Permalink: How they fit together (intended flow)" href="#how-they-fit-together-intended-flow"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>Agents execute work using SDK trust controls.</li>
+<li>Platform mediates paid interactions (orders/escrow/settlement/disputes).</li>
+<li>Portal exposes these workflows to users/admins.</li>
+</ol>
+<p>This is a sound layered design; the key issue is execution consistency between layers.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">4) Cross-stack architecture strengths</h2><a id="user-content-4-cross-stack-architecture-strengths" class="anchor" aria-label="Permalink: 4) Cross-stack architecture strengths" href="#4-cross-stack-architecture-strengths"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<p><strong>Cohesive product thesis across all layers</strong><br>
+Not three random repos: trust protocol, platform economics, and customer UX align to one business narrative.</p>
+</li>
+<li>
+<p><strong>Trust + money combination is strategically strong</strong><br>
+Many competitors can offer “agent directory” or “payments.” Fewer can combine verifiable execution evidence with escrow/dispute/settlement.</p>
+</li>
+<li>
+<p><strong>Local-first trust foundation with network optionality</strong><br>
+SDK architecture allows offline/local trust workflows while enabling shared trust sync later.</p>
+</li>
+<li>
+<p><strong>Commercial primitives already encoded in backend</strong><br>
+Orders, account balances, fee logic, certification, boosts, dispute handling, admin reconciliation are implemented concepts, not just slides.</p>
+</li>
+<li>
+<p><strong>Portal communicates product clearly</strong><br>
+Documentation and UX segmentation (public/user/admin) are strong for partner and early customer onboarding.</p>
+</li>
+</ol>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">5) Cross-stack weaknesses / integration gaps</h2><a id="user-content-5-cross-stack-weaknesses--integration-gaps" class="anchor" aria-label="Permalink: 5) Cross-stack weaknesses / integration gaps" href="#5-cross-stack-weaknesses--integration-gaps"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<p><strong>Trust model fragmentation across stack</strong><br>
+SDK has a rigorous trust/proof system and separate trust service model; Platform maintains its own trust score fields and update paths. This creates ambiguity about the canonical trust source of truth.</p>
+</li>
+<li>
+<p><strong>Contract drift between components</strong><br>
+Concrete examples include endpoint/migration mismatches and script/export mismatches. This indicates weak integration governance and release coupling across repos.</p>
+</li>
+<li>
+<p><strong>Protocol verification not yet consistently institutionalized</strong><br>
+Platform validates completion artifacts, but end-to-end alignment with SDK’s full verification semantics is still not fully unified into one canonical pipeline.</p>
+</li>
+<li>
+<p><strong>Frontend/backend coupling without strong typed contracts</strong><br>
+Portal relies heavily on backend response assumptions (<code>any</code> usage, mixed fetch patterns), increasing runtime breakage risk as backend evolves.</p>
+</li>
+<li>
+<p><strong>Operational behavior spread across in-process loops/manual assumptions</strong><br>
+Background jobs, reconciliation, and notification pathways exist, but distributed reliability patterns are still early.</p>
+</li>
+</ol>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">6) Code quality / maintainability across the stack</h2><a id="user-content-6-code-quality--maintainability-across-the-stack" class="anchor" aria-label="Permalink: 6) Code quality / maintainability across the stack" href="#6-code-quality--maintainability-across-the-stack"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Stack-level assessment: <strong>Medium, with high variance</strong>
+</h3><a id="user-content-stack-level-assessment-medium-with-high-variance" class="anchor" aria-label="Permalink: Stack-level assessment: Medium, with high variance" href="#stack-level-assessment-medium-with-high-variance"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<strong>SDK:</strong> strongest engineering discipline (modular design, strong TS, broad tests), but with notable ops/docs drift and a monolithic CLI hotspot.</li>
+<li>
+<strong>Platform:</strong> promising modular domain structure, but maintainability risk from schema drift, large concentrated files (especially payments), and limited high-risk automated tests.</li>
+<li>
+<strong>Portal:</strong> shippable UI, but lint/type debt, no visible test suite, and weak developer documentation reduce confidence.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Cross-stack maintainability concern</h3><a id="user-content-cross-stack-maintainability-concern" class="anchor" aria-label="Permalink: Cross-stack maintainability concern" href="#cross-stack-maintainability-concern"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>The biggest issue is not one bad repo; it is <strong>cross-repo quality gate inconsistency</strong>. Each repo has different standards, and there is no clear evidence of enforced end-to-end contract/version discipline.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">7) Security / compliance / trust posture</h2><a id="user-content-7-security--compliance--trust-posture" class="anchor" aria-label="Permalink: 7) Security / compliance / trust posture" href="#7-security--compliance--trust-posture"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">What is strong</h3><a id="user-content-what-is-strong" class="anchor" aria-label="Permalink: What is strong" href="#what-is-strong"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>SDK cryptographic backbone (DID signatures, trace/proof constructs, optional anchoring) is a real differentiator.</li>
+<li>Platform includes DID-authenticated routes for key agent actions and transactional controls.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">What is weak (systemic)</h3><a id="user-content-what-is-weak-systemic" class="anchor" aria-label="Permalink: What is weak (systemic)" href="#what-is-weak-systemic"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Auth/session handling and defaults are uneven across stack (e.g., browser token storage patterns, permissive/default configurations, public DID-query read surfaces).</li>
+<li>Some backend surfaces appear under-protected relative to their sensitivity (relay/admin/config guard quality varies).</li>
+<li>CORS/secret-management/security-hardening posture is not yet enterprise-standard.</li>
+<li>Monetary correctness model still uses float semantics in key financial paths, which is a trust/compliance liability for scale.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Executive compliance posture</h3><a id="user-content-executive-compliance-posture" class="anchor" aria-label="Permalink: Executive compliance posture" href="#executive-compliance-posture"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>Atel is <strong>not yet audit-ready</strong> for strict enterprise procurement (SOC2/ISO-style expectations), but can become credible with a focused hardening program.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">8) Operational readiness / deployability / observability</h2><a id="user-content-8-operational-readiness--deployability--observability" class="anchor" aria-label="Permalink: 8) Operational readiness / deployability / observability" href="#8-operational-readiness--deployability--observability"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Current state</h3><a id="user-content-current-state" class="anchor" aria-label="Permalink: Current state" href="#current-state"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<strong>Deployability:</strong> acceptable for controlled environments (SDK and Portal build reliably; Platform deploys as single binary).</li>
+<li>
+<strong>Observability:</strong> limited across stack (minimal structured metrics/tracing/SLO instrumentation).</li>
+<li>
+<strong>Reliability engineering:</strong> uneven test depth for operationally critical workflows, especially cross-component scenarios.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Executive view</h3><a id="user-content-executive-view" class="anchor" aria-label="Permalink: Executive view" href="#executive-view"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>Atel can support <strong>pilot operations</strong>, but current stack maturity is insufficient for broad production commitments where uptime, forensic visibility, and incident response are contractual.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">9) Technical moat potential</h2><a id="user-content-9-technical-moat-potential" class="anchor" aria-label="Permalink: 9) Technical moat potential" href="#9-technical-moat-potential"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>Atel’s potential moat is credible and non-trivial if execution quality catches up:</p>
+<ul>
+<li>
+<strong>Evidence moat:</strong> verifiable execution artifacts tied to transaction outcomes.</li>
+<li>
+<strong>Economic moat:</strong> escrow + dispute + settlement integrated with trust data.</li>
+<li>
+<strong>Data moat:</strong> historical task outcomes, dispute precedents, and performance/credibility records compound over time.</li>
+</ul>
+<p>Today, moat is <strong>architecturally plausible but operationally fragile</strong>. Without hardening, the moat remains a thesis rather than a defensible reality.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">10) Key technical and business risks</h2><a id="user-content-10-key-technical-and-business-risks" class="anchor" aria-label="Permalink: 10) Key technical and business risks" href="#10-key-technical-and-business-risks"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<strong>Credibility risk</strong>: mismatch between strong trust claims and uneven production hardening could erode buyer confidence quickly.</li>
+<li>
+<strong>Financial integrity risk</strong>: float-based money logic and partial ledger-path consistency can create reconciliation and trust incidents.</li>
+<li>
+<strong>Security incident risk</strong>: uneven auth/session/default-hardening could create exploitable surfaces.</li>
+<li>
+<strong>Integration regression risk</strong>: schema/API/script drift across repos can break key journeys (marketplace, completion, settlement, admin).</li>
+<li>
+<strong>Go-to-market risk</strong>: sales motion may outrun reliability/compliance maturity.</li>
+<li>
+<strong>Platform concentration risk</strong>: Portal depends heavily on backend correctness/availability; weak backend resilience directly impacts user trust.</li>
+</ol>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">11) Recommended technical priorities</h2><a id="user-content-11-recommended-technical-priorities" class="anchor" aria-label="Permalink: 11) Recommended technical priorities" href="#11-recommended-technical-priorities"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Priority 0 (0–30 days): hard blockers</h3><a id="user-content-priority-0-030-days-hard-blockers" class="anchor" aria-label="Permalink: Priority 0 (0–30 days): hard blockers" href="#priority-0-030-days-hard-blockers"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<strong>Unify canonical trust pipeline</strong> across SDK and Platform (single source-of-truth semantics for score/proof acceptance).</li>
+<li>
+<strong>Fix schema/API contract drift</strong> and add migration completeness checks (including offer/online/state consistency).</li>
+<li>
+<strong>Close critical security posture gaps</strong> (admin/session handling, relay/auth surfaces, secure defaults, secret enforcement).</li>
+<li>
+<strong>Introduce money-safe accounting model</strong> (integer minor units or decimal library, plus ledger invariants).</li>
+</ol>
+<div class="markdown-heading"><h3 class="heading-element">Priority 1 (30–60 days): reliability foundation</h3><a id="user-content-priority-1-3060-days-reliability-foundation" class="anchor" aria-label="Permalink: Priority 1 (30–60 days): reliability foundation" href="#priority-1-3060-days-reliability-foundation"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol start="5">
+<li>
+<strong>Cross-repo contract tests</strong> (Portal↔Platform API compatibility; Platform↔SDK proof expectations).</li>
+<li>
+<strong>CI quality gates by default</strong> (lint/tests/build/contract checks blocking release in all repos).</li>
+<li>
+<strong>Operational telemetry baseline</strong> (structured logs, key business/technical metrics, error budgets for order/payment/dispute flows).</li>
+</ol>
+<div class="markdown-heading"><h3 class="heading-element">Priority 2 (60–90 days): pilot hardening</h3><a id="user-content-priority-2-6090-days-pilot-hardening" class="anchor" aria-label="Permalink: Priority 2 (60–90 days): pilot hardening" href="#priority-2-6090-days-pilot-hardening"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol start="8">
+<li>
+<strong>Runbook + incident response maturity</strong> (on-call playbooks, reconciliation procedures, rollback plans).</li>
+<li>
+<strong>Security review + threat model refresh</strong> across trust/payment/admin paths.</li>
+<li>
+<strong>Controlled pilot with explicit success criteria</strong> before scale sales expansion.</li>
+</ol>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">12) Executive pros / cons / strengths / weaknesses</h2><a id="user-content-12-executive-pros--cons--strengths--weaknesses" class="anchor" aria-label="Permalink: 12) Executive pros / cons / strengths / weaknesses" href="#12-executive-pros--cons--strengths--weaknesses"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Pros</h3><a id="user-content-pros" class="anchor" aria-label="Permalink: Pros" href="#pros"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Coherent full-stack vision (trust + commerce + governance + UX).</li>
+<li>Real technical substance, especially in SDK trust architecture.</li>
+<li>Backend encodes monetization mechanics, not just registry listings.</li>
+<li>Portal creates strong product legibility for customers and partners.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Cons</h3><a id="user-content-cons" class="anchor" aria-label="Permalink: Cons" href="#cons"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Production hardening lags strategic ambition.</li>
+<li>Cross-repo integration discipline is inconsistent.</li>
+<li>Security/auth defaults and financial precision choices need urgent upgrades.</li>
+<li>Observability and test maturity are below enterprise comfort levels.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Strengths</h3><a id="user-content-strengths" class="anchor" aria-label="Permalink: Strengths" href="#strengths"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Strong architectural direction.</li>
+<li>High moat potential if operationalized.</li>
+<li>Clear path to pilotable value with targeted fixes.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Weaknesses</h3><a id="user-content-weaknesses" class="anchor" aria-label="Permalink: Weaknesses" href="#weaknesses"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Execution risk at boundaries between repos.</li>
+<li>Quality variability by team/surface.</li>
+<li>Limited evidence of mature release engineering governance.</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">13) Final recommendation</h2><a id="user-content-13-final-recommendation" class="anchor" aria-label="Permalink: 13) Final recommendation" href="#13-final-recommendation"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h2 class="heading-element">Recommendation: <strong>INVEST, HARDEN, THEN PILOT (stage-gated)</strong>
+</h2><a id="user-content-recommendation-invest-harden-then-pilot-stage-gated" class="anchor" aria-label="Permalink: Recommendation: INVEST, HARDEN, THEN PILOT (stage-gated)" href="#recommendation-invest-harden-then-pilot-stage-gated"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<strong>Do not rewrite</strong>: the core architecture and business primitives are worth preserving.</li>
+<li>
+<strong>Do not broad-scale immediately</strong>: current stack has avoidable trust, security, and operational risks.</li>
+<li>
+<strong>Fund a focused 60–90 day hardening program</strong> with explicit exit criteria:
+<ul>
+<li>canonical trust pipeline in production,</li>
+<li>money-safe accounting invariants,</li>
+<li>cross-repo contract tests and CI enforcement,</li>
+<li>baseline security hardening and observability.</li>
+</ul>
+</li>
+</ul>
+<p>If those gates are met, Atel is a credible candidate for <strong>targeted commercial pilots</strong> and can then scale with materially lower execution risk.</p>
+<hr>
+<div class="markdown-heading"><h3 class="heading-element">Executive readiness snapshot (current)</h3><a id="user-content-executive-readiness-snapshot-current" class="anchor" aria-label="Permalink: Executive readiness snapshot (current)" href="#executive-readiness-snapshot-current"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<strong>Strategic architecture quality:</strong> High</li>
+<li>
+<strong>Codebase maturity (overall):</strong> Medium</li>
+<li>
+<strong>Security/compliance readiness:</strong> Low–Medium</li>
+<li>
+<strong>Operational maturity:</strong> Low–Medium</li>
+<li>
+<strong>Commercialization readiness (today):</strong> Pilot-only after hardening</li>
+<li>
+<strong>Commercialization readiness (post hardening):</strong> Moderate-to-strong for early enterprise design partners</li>
+</ul>
+</div></body></html>

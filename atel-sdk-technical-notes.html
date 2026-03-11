@@ -1,0 +1,403 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Atel Sdk Technical Notes</title><style>
+body{font-family:Inter,system-ui,-apple-system,sans-serif;max-width:980px;margin:40px auto;padding:0 20px;line-height:1.6;color:#111;background:#fafafa}
+a{color:#0b57d0;text-decoration:none} a:hover{text-decoration:underline}
+.card{background:white;border:1px solid #e5e7eb;border-radius:16px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.03)}
+pre{white-space:pre-wrap;word-break:break-word;background:#f6f8fa;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f4f6;padding:2px 6px;border-radius:6px}
+ul{padding-left:22px} li{margin:8px 0}.muted{color:#666}.top{margin-bottom:20px}
+</style></head><body><div class="top"><a href="../index.html">← Back to index</a></div><div class="card"><h1>Atel Sdk Technical Notes</h1><p class="muted"><a href="./reports/atel-sdk-technical-notes.md">Download raw markdown</a></p><div class="markdown-heading"><h1 class="heading-element">ATEL SDK — Executive Technical Notes</h1><a id="user-content-atel-sdk--executive-technical-notes" class="anchor" aria-label="Permalink: ATEL SDK — Executive Technical Notes" href="#atel-sdk--executive-technical-notes"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h2 class="heading-element">1) Executive summary</h2><a id="user-content-1-executive-summary" class="anchor" aria-label="Permalink: 1) Executive summary" href="#1-executive-summary"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>ATEL SDK is a serious attempt at a <strong>trust layer for multi-agent execution</strong>: signed identities, scoped consent, policy-gated tool calls, tamper-evident traces, Merkle proof bundles, optional blockchain anchoring, and trust score/graph accumulation.</p>
+<p><strong>Bottom line:</strong> this is <strong>not vaporware</strong>. Core architecture is real and test-backed. But it is also <strong>not yet production-hardened</strong> as-is.</p>
+<ul>
+<li>Core library quality: <strong>good</strong>
+</li>
+<li>Security posture: <strong>mixed (strong primitives, weak defaults/ops hardening)</strong>
+</li>
+<li>Product readiness: <strong>pilot-ready only after hardening sprint</strong>
+</li>
+<li>Recommendation: <strong>Harden + controlled pilot</strong> (not rewrite)</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">2) What this repo appears to be / product role in broader Atel stack</h2><a id="user-content-2-what-this-repo-appears-to-be--product-role-in-broader-atel-stack" class="anchor" aria-label="Permalink: 2) What this repo appears to be / product role in broader Atel stack" href="#2-what-this-repo-appears-to-be--product-role-in-broader-atel-stack"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>This repo looks like the <strong>SDK + protocol runtime layer</strong> for ATEL:</p>
+<ul>
+<li>Local trust execution engine (<code>src/orchestrator</code>, <code>src/policy</code>, <code>src/gateway</code>, <code>src/trace</code>, <code>src/proof</code>)</li>
+<li>Optional network trust sync (<code>src/trust-sync</code>, <code>src/service</code>)</li>
+<li>Agent interconnect and discovery (<code>src/endpoint</code>, <code>src/handshake</code>, <code>src/network</code>, <code>src/registry</code>)</li>
+<li>Optional anchor to external chains (<code>src/anchor/*</code>)</li>
+<li>CLI/operator surface (<code>bin/atel.mjs</code>)</li>
+</ul>
+<p>In stack terms, this is the <strong>control plane / trust middleware</strong> between autonomous agent actions and external tools/APIs.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">3) Architecture and module breakdown</h2><a id="user-content-3-architecture-and-module-breakdown" class="anchor" aria-label="Permalink: 3) Architecture and module breakdown" href="#3-architecture-and-module-breakdown"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Core trust execution pipeline</h3><a id="user-content-core-trust-execution-pipeline" class="anchor" aria-label="Permalink: Core trust execution pipeline" href="#core-trust-execution-pipeline"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<strong>Identity</strong>: Ed25519 DID-based identity (<code>src/identity/index.ts</code>)</li>
+<li>
+<strong>Task + consent</strong>: task schema/signing + consent token mint/verify (<code>src/schema</code>, <code>src/policy</code>)</li>
+<li>
+<strong>Tool invocation</strong>: policy-mediated gateway with input/output hashing (<code>src/gateway</code>)</li>
+<li>
+<strong>Trace</strong>: append-only hash-chain events + signed checkpoints (<code>src/trace</code>)</li>
+<li>
+<strong>Proof</strong>: Merkleized proof bundle + verifier (<code>src/proof</code>)</li>
+<li>
+<strong>Anchor</strong>: optional chain anchoring and verify (<code>src/anchor/index.ts</code>, <code>evm.ts</code>, <code>solana.ts</code>)</li>
+<li>
+<strong>Trust accumulation</strong>: score + graph (<code>src/score</code>, <code>src/graph</code>, <code>src/trust</code>)</li>
+<li>
+<strong>Orchestration</strong>: end-to-end delegation/execution/verification (<code>src/orchestrator</code>)</li>
+</ol>
+<div class="markdown-heading"><h3 class="heading-element">Network/interconnect layer</h3><a id="user-content-networkinterconnect-layer" class="anchor" aria-label="Permalink: Network/interconnect layer" href="#networkinterconnect-layer"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Envelope + nonce/timestamp validation (<code>src/envelope</code>)</li>
+<li>Mutual handshake + encrypted session setup (<code>src/handshake</code>, <code>src/crypto</code>)</li>
+<li>HTTP endpoint/client for agent-to-agent message exchange (<code>src/endpoint</code>)</li>
+<li>Registry discovery + connection candidate strategy (<code>src/registry</code>, <code>src/network</code>)</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Service and ops</h3><a id="user-content-service-and-ops" class="anchor" aria-label="Permalink: Service and ops" href="#service-and-ops"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Trust score service over Express with JSON persistence (<code>src/service/index.ts</code>)</li>
+<li>Operational scripts (<code>scripts/doctor.ts</code>, <code>scripts/agent-cluster-runner.ts</code>, <code>scripts/testnet-anchor-smoke.ts</code>)</li>
+<li>Large CLI control plane (<code>bin/atel.mjs</code>, ~2928 lines)</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">4) Engineering strengths</h2><a id="user-content-4-engineering-strengths" class="anchor" aria-label="Permalink: 4) Engineering strengths" href="#4-engineering-strengths"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<p><strong>Clear trust architecture with cryptographic spine</strong></p>
+<ul>
+<li>Strong conceptual decomposition across identity/policy/trace/proof/anchor.</li>
+</ul>
+</li>
+<li>
+<p><strong>Strong TypeScript discipline in core modules</strong></p>
+<ul>
+<li>
+<code>tsconfig.json</code> uses <code>strict: true</code>.</li>
+<li>Interfaces and error types are explicit and consistent.</li>
+</ul>
+</li>
+<li>
+<p><strong>Deterministic verification design</strong></p>
+<ul>
+<li>Deterministic serializers and hashing appear in multiple modules (<code>gateway</code>, <code>trace</code>, <code>proof</code>).</li>
+<li>Merkle proof verification is implemented, not just documented (<code>src/proof/index.ts</code>).</li>
+</ul>
+</li>
+<li>
+<p><strong>Broad test surface area</strong></p>
+<ul>
+<li>24 test files, 342 test cases; local run passed 341/342 (1 skipped integration).</li>
+<li>Covers most trust primitives and orchestrator flow.</li>
+</ul>
+</li>
+<li>
+<p><strong>Useful deployment building blocks already exist</strong></p>
+<ul>
+<li>
+<code>doctor</code>, cluster runner, quickstarts, real-API demo, and testnet smoke script are practical.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">5) Engineering weaknesses / technical debt</h2><a id="user-content-5-engineering-weaknesses--technical-debt" class="anchor" aria-label="Permalink: 5) Engineering weaknesses / technical debt" href="#5-engineering-weaknesses--technical-debt"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<p><strong>Critical script breakage in acceptance path</strong></p>
+<ul>
+<li>
+<code>scripts/deploy-acceptance.ts</code> imports <code>TrustScoreService</code> from <code>../src/index.js</code>, but <code>src/index.ts</code> explicitly does <strong>not</strong> export service.</li>
+<li>Verified: <code>npm run acceptance:deploy</code> fails with missing export runtime error.</li>
+</ul>
+</li>
+<li>
+<p><strong>Documentation drift / inconsistencies</strong></p>
+<ul>
+<li>Wrong package name appears in docs (<code>@lawreneliang/atel-sdk</code>) vs real package (<code>@lawrenceliang-btc/atel-sdk</code>).</li>
+<li>README says 241 tests, current run is 342.</li>
+<li>API doc references <code>executeRollback()</code> while implementation exposes <code>rollback()</code> (<code>src/rollback/index.ts</code>).</li>
+</ul>
+</li>
+<li>
+<p><strong>Monolithic CLI blast radius</strong></p>
+<ul>
+<li>
+<code>bin/atel.mjs</code> is very large and multi-responsibility (~2928 LOC), increasing regression risk and review difficulty.</li>
+</ul>
+</li>
+<li>
+<p><strong>Partial integration of advanced modules</strong></p>
+<ul>
+<li>Negotiation/collaboration modules exist, but endpoint integration is incomplete (e.g., negotiation client expects <code>/atel/v1/capability/negotiate</code>, endpoint does not expose it).</li>
+</ul>
+</li>
+</ol>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">6) Code quality and maintainability assessment</h2><a id="user-content-6-code-quality-and-maintainability-assessment" class="anchor" aria-label="Permalink: 6) Code quality and maintainability assessment" href="#6-code-quality-and-maintainability-assessment"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>Overall maintainability is <strong>moderate-good in core library</strong>, <strong>weaker in ops/CLI layer</strong>.</p>
+<ul>
+<li>Good:
+<ul>
+<li>Clean module boundaries in <code>src/</code>.</li>
+<li>Rich inline docs and typed models.</li>
+<li>Core flows readable.</li>
+</ul>
+</li>
+<li>Weak:
+<ul>
+<li>Drift between docs/scripts/exports.</li>
+<li>Missing CI-level safeguards evident (acceptance script broken but not prevented by tests).</li>
+<li>No visible repo CI workflows / coverage gate.</li>
+</ul>
+</li>
+</ul>
+<p>Large complexity hotspots:</p>
+<ul>
+<li>
+<code>src/gateway/index.ts</code> (~713 LOC)</li>
+<li>
+<code>src/proof/index.ts</code> (~701 LOC)</li>
+<li>
+<code>src/graph/index.ts</code> (~642 LOC)</li>
+<li>
+<code>src/trace/index.ts</code> (~596 LOC)</li>
+<li>
+<code>src/endpoint/index.ts</code> (~546 LOC)</li>
+<li>
+<code>src/executor/index.ts</code> (~536 LOC)</li>
+<li>
+<code>bin/atel.mjs</code> (~2928 LOC)</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">7) Security / trust / crypto posture observations</h2><a id="user-content-7-security--trust--crypto-posture-observations" class="anchor" aria-label="Permalink: 7) Security / trust / crypto posture observations" href="#7-security--trust--crypto-posture-observations"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">What is strong</h3><a id="user-content-what-is-strong" class="anchor" aria-label="Permalink: What is strong" href="#what-is-strong"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Correct primitive choices for identity/signatures and session encryption (Ed25519/X25519 via tweetnacl).</li>
+<li>Signed task + signed consent verification in orchestrator execution path.</li>
+<li>Tamper-evident trace hash chain and signed checkpoints.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">What is risky</h3><a id="user-content-what-is-risky" class="anchor" aria-label="Permalink: What is risky" href="#what-is-risky"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<p><strong>Default service auth is absent</strong></p>
+<ul>
+<li>
+<code>TrustScoreService</code> endpoints accept submissions without built-in auth (<code>src/service/index.ts</code>), while docs merely recommend adding auth.</li>
+</ul>
+</li>
+<li>
+<p><strong>Policy context can be caller-influenced</strong></p>
+<ul>
+<li>Gateway policy adapter uses request-supplied <code>risk_level</code>/<code>data_scope</code>; strong trust depends on honest caller classification (<code>src/gateway/index.ts</code>).</li>
+</ul>
+</li>
+<li>
+<p><strong>Replay/nonce protection scope is in-memory</strong></p>
+<ul>
+<li>Envelope nonce tracker is process-local and ephemeral (<code>src/envelope/index.ts</code>), not distributed/persistent.</li>
+</ul>
+</li>
+<li>
+<p><strong>Secret handling concerns in CLI</strong></p>
+<ul>
+<li>CLI persists identity secret key in plaintext JSON (<code>bin/atel.mjs</code>, <code>saveIdentity</code>).</li>
+</ul>
+</li>
+<li>
+<p><strong>Permissive execution path in tool gateway proxy</strong></p>
+<ul>
+<li>CLI proxy initializes a permissive policy that always allows (<code>bin/atel.mjs</code>, <code>startToolGatewayProxy</code>).</li>
+</ul>
+</li>
+<li>
+<p><strong>Dependency risk</strong></p>
+<ul>
+<li>
+<code>npm audit</code> reports 11 vulns (including critical/high), largely transitively via <code>nat-upnp</code>/<code>request</code> chain.</li>
+</ul>
+</li>
+<li>
+<p><strong>Trust semantics mismatch risk</strong></p>
+<ul>
+<li>Score module comments emphasize on-chain proof records, but practical path often relies on submitted summaries unless proof ingestion/verification is actively wired (<code>src/score/index.ts</code>, <code>src/service/index.ts</code>).</li>
+</ul>
+</li>
+</ol>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">8) Testing and verification maturity</h2><a id="user-content-8-testing-and-verification-maturity" class="anchor" aria-label="Permalink: 8) Testing and verification maturity" href="#8-testing-and-verification-maturity"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Positive</h3><a id="user-content-positive" class="anchor" aria-label="Permalink: Positive" href="#positive"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Build succeeds (<code>npm run build</code>).</li>
+<li>Unit/integration suite is extensive and fast (341 passed, 1 skipped integration).</li>
+<li>Practical scripts (<code>doctor</code>, quickstarts, cluster runner) are useful for confidence checks.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Gaps</h3><a id="user-content-gaps" class="anchor" aria-label="Permalink: Gaps" href="#gaps"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>One integration test is explicitly skipped unless env flag is set (<code>tests/real-api.integration.test.ts</code>).</li>
+<li>Some tests depend on live network (<code>tests/gateway.test.ts</code> RealHttpTool block), which can create flaky CI outcomes.</li>
+<li>No tests for key operational surfaces like:
+<ul>
+<li><code>bin/atel.mjs</code></li>
+<li><code>src/network/index.ts</code></li>
+<li><code>src/executor/index.ts</code></li>
+<li>script-level acceptance wiring (hence broken <code>acceptance:deploy</code> escaped).</li>
+</ul>
+</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">9) Operational readiness / deployability / observability</h2><a id="user-content-9-operational-readiness--deployability--observability" class="anchor" aria-label="Permalink: 9) Operational readiness / deployability / observability" href="#9-operational-readiness--deployability--observability"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>Current posture: <strong>developer-friendly, production-light</strong>.</p>
+<ul>
+<li>Deployability:
+<ul>
+<li>Service exists and works with file persistence (<code>scores.json</code>, <code>graph.json</code>).</li>
+<li>No containerization/deployment manifests in repo.</li>
+</ul>
+</li>
+<li>Observability:
+<ul>
+<li>Mostly console logs; no structured metrics/tracing/SLO instrumentation.</li>
+</ul>
+</li>
+<li>Reliability:
+<ul>
+<li>Local flows tested and quick.</li>
+<li>Acceptance flow currently broken due export mismatch.</li>
+</ul>
+</li>
+<li>Security operations:
+<ul>
+<li>No built-in auth hard defaults for trust service.</li>
+<li>No explicit key vault integration; secret management mostly environment/files.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">10) Scalability and extensibility</h2><a id="user-content-10-scalability-and-extensibility" class="anchor" aria-label="Permalink: 10) Scalability and extensibility" href="#10-scalability-and-extensibility"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Extensibility: good</h3><a id="user-content-extensibility-good" class="anchor" aria-label="Permalink: Extensibility: good" href="#extensibility-good"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Plugin-like architecture for anchors/providers.</li>
+<li>Clear interfaces for trust sync adapter, endpoint handlers, registry client, etc.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Scalability: currently limited by design choices</h3><a id="user-content-scalability-currently-limited-by-design-choices" class="anchor" aria-label="Permalink: Scalability: currently limited by design choices" href="#scalability-currently-limited-by-design-choices"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>In-memory state + JSON file persistence in service limits horizontal scaling.</li>
+<li>Trust graph computations and cluster detection are bounded but still algorithmically heavier at large scale.</li>
+<li>No distributed nonce/session coordination for multi-instance endpoints.</li>
+<li>No DB/message-bus abstraction for high-throughput multi-tenant operation.</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">11) Key risks (technical + productization)</h2><a id="user-content-11-key-risks-technical--productization" class="anchor" aria-label="Permalink: 11) Key risks (technical + productization)" href="#11-key-risks-technical--productization"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>
+<strong>Credibility risk</strong>: docs/scripts drift and broken acceptance command undermine enterprise confidence.</li>
+<li>
+<strong>Security risk</strong>: open-by-default service path + dependency vulnerabilities + permissive proxy mode.</li>
+<li>
+<strong>Operational risk</strong>: absence of CI/workflow hard gates and production observability.</li>
+<li>
+<strong>Trust model risk</strong>: potential over-interpretation of trust scores derived from submitted summaries vs externally verified records.</li>
+<li>
+<strong>Scale risk</strong>: current persistence and graph mechanics are adequate for pilot but not for large network rollout.</li>
+</ol>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">12) Strategic upside / moat potential from codebase itself</h2><a id="user-content-12-strategic-upside--moat-potential-from-codebase-itself" class="anchor" aria-label="Permalink: 12) Strategic upside / moat potential from codebase itself" href="#12-strategic-upside--moat-potential-from-codebase-itself"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>If hardened, this codebase has real strategic leverage:</p>
+<ul>
+<li>
+<strong>Verifiability as product differentiator</strong>: trace + proof + anchor is stronger than typical agent orchestration claims.</li>
+<li>
+<strong>Composable trust substrate</strong>: separation of local trust and optional network sync is a practical adoption path.</li>
+<li>
+<strong>Cross-agent protocol foundation</strong>: identity/handshake/envelope/endpoint modules can become protocol moat if ecosystem adoption occurs.</li>
+</ul>
+<p>In short: the moat is not just “agent tooling”; it is <strong>auditable agent execution fabric</strong>.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">13) Recommendation (invest / pilot / harden / rewrite)</h2><a id="user-content-13-recommendation-invest--pilot--harden--rewrite" class="anchor" aria-label="Permalink: 13) Recommendation (invest / pilot / harden / rewrite)" href="#13-recommendation-invest--pilot--harden--rewrite"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Recommendation: <strong>HARDEN THEN PILOT</strong>
+</h3><a id="user-content-recommendation-harden-then-pilot" class="anchor" aria-label="Permalink: Recommendation: HARDEN THEN PILOT" href="#recommendation-harden-then-pilot"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>Do <strong>not rewrite</strong>. Core architecture is worth investing in.</p>
+<p>Suggested sequence:</p>
+<ol>
+<li>
+<p><strong>Immediate hardening (2–4 weeks)</strong></p>
+<ul>
+<li>Fix acceptance export bug (<code>TrustScoreService</code> import/export mismatch).</li>
+<li>Align package/docs/license metadata.</li>
+<li>Add auth middleware to service summary endpoint by default.</li>
+<li>Patch/update vulnerable dependency chain (<code>nat-upnp</code> path).</li>
+</ul>
+</li>
+<li>
+<p><strong>Reliability hardening (next 2–4 weeks)</strong></p>
+<ul>
+<li>Add CI with deterministic offline-safe test profile.</li>
+<li>Add script/e2e tests for CLI + executor + acceptance commands.</li>
+<li>Add minimal production telemetry (latency/error/rate metrics).</li>
+</ul>
+</li>
+<li>
+<p><strong>Controlled pilot (4–8 weeks)</strong></p>
+<ul>
+<li>Internal or friendly-design-partner pilot with strict success criteria.</li>
+<li>Limit to low/medium risk flows first; require proof validation and anchor verification for selected critical paths.</li>
+</ul>
+</li>
+</ol>
+<p>Investment stance: <strong>positive, conditional on hardening milestones</strong>.</p>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">14) Executive bullets: pros, cons, strengths, weaknesses</h2><a id="user-content-14-executive-bullets-pros-cons-strengths-weaknesses" class="anchor" aria-label="Permalink: 14) Executive bullets: pros, cons, strengths, weaknesses" href="#14-executive-bullets-pros-cons-strengths-weaknesses"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Pros</h3><a id="user-content-pros" class="anchor" aria-label="Permalink: Pros" href="#pros"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Real, coherent trust architecture; not a thin wrapper.</li>
+<li>Strong cryptographic/verifiability backbone.</li>
+<li>Extensive core test suite and successful build/test runs.</li>
+<li>Useful local-first design with optional network mode.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Cons</h3><a id="user-content-cons" class="anchor" aria-label="Permalink: Cons" href="#cons"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Production hardening incomplete.</li>
+<li>Critical script break in advertised acceptance path.</li>
+<li>Security defaults and dependency hygiene need work.</li>
+<li>Documentation and package metadata inconsistencies.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Strengths</h3><a id="user-content-strengths" class="anchor" aria-label="Permalink: Strengths" href="#strengths"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Modular protocol design.</li>
+<li>Good TypeScript structure in core modules.</li>
+<li>Clear proof and anchoring story for audit/compliance narratives.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Weaknesses</h3><a id="user-content-weaknesses" class="anchor" aria-label="Permalink: Weaknesses" href="#weaknesses"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Monolithic CLI and operational debt.</li>
+<li>Missing CI guardrails for docs/scripts/exports alignment.</li>
+<li>Limited out-of-box observability and scale architecture.</li>
+</ul>
+<hr>
+<div class="markdown-heading"><h2 class="heading-element">Verification commands executed (for this assessment)</h2><a id="user-content-verification-commands-executed-for-this-assessment" class="anchor" aria-label="Permalink: Verification commands executed (for this assessment)" href="#verification-commands-executed-for-this-assessment"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<code>npm ci</code> (installed deps; reported deprecations/vulns)</li>
+<li>
+<code>npm run build</code> ✅</li>
+<li>
+<code>npm test</code> ✅ (341 passed, 1 skipped)</li>
+<li>
+<code>npm run quickstart:local</code> ✅</li>
+<li>
+<code>npm run demo:real</code> ✅</li>
+<li>
+<code>npm run run:cluster</code> ✅ (mock-backed, 100/100 success)</li>
+<li>
+<code>npm run doctor</code> ✅</li>
+<li>
+<code>npm run acceptance:deploy</code> ❌ (missing <code>TrustScoreService</code> export)</li>
+<li>
+<code>npm run smoke:anchor</code> ❌ (expected env vars not set)</li>
+<li>
+<code>npm audit --json</code> ❌ (11 vulnerabilities reported)</li>
+</ul>
+</div></body></html>

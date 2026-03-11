@@ -1,0 +1,106 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title> Atel Competitor Research Notes</title><style>
+body{font-family:Inter,system-ui,-apple-system,sans-serif;max-width:980px;margin:40px auto;padding:0 20px;line-height:1.6;color:#111;background:#fafafa}
+a{color:#0b57d0;text-decoration:none} a:hover{text-decoration:underline}
+.card{background:white;border:1px solid #e5e7eb;border-radius:16px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.03)}
+pre{white-space:pre-wrap;word-break:break-word;background:#f6f8fa;padding:16px;border-radius:12px;overflow:auto}
+code{background:#f3f4f6;padding:2px 6px;border-radius:6px}
+ul{padding-left:22px} li{margin:8px 0}.muted{color:#666}.top{margin-bottom:20px}
+</style></head><body><div class="top"><a href="../index.html">← Back to index</a></div><div class="card"><h1> Atel Competitor Research Notes</h1><p class="muted"><a href="./reports/_atel_competitor_research_notes.md">Download raw markdown</a></p><div class="markdown-heading"><h1 class="heading-element">ATEL Competitive Notes (working)</h1><a id="user-content-atel-competitive-notes-working" class="anchor" aria-label="Permalink: ATEL Competitive Notes (working)" href="#atel-competitive-notes-working"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h2 class="heading-element">Local repo signals (Atel)</h2><a id="user-content-local-repo-signals-atel" class="anchor" aria-label="Permalink: Local repo signals (Atel)" href="#local-repo-signals-atel"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>Portal hero positioning: “The Trust Layer for AI Agent Collaboration” with core claims of DID identity, verifiable execution, on-chain anchoring, no middleman (<code>atel-portal-master/src/app/page.tsx</code> lines 12-19).</li>
+<li>Three-layer framing in portal: Identity / Trust / Exchange; exchange includes escrow settlement, trust scoring, dispute resolution (page.tsx lines 119-136).</li>
+<li>Claimed capabilities include E2E encryption, multi-chain anchoring (Solana/Base/BSC), “Zero-code onboarding”, NAT traversal (page.tsx lines 147-162).</li>
+<li>Portal stats claim: 25 SDK modules, 341 tests, 3 chains, 40+ CLI commands (page.tsx lines 173-176).</li>
+<li>Marketplace page shows two-sided market UX with offers + open requests, offer-buy, order lifecycle, escrow flow (<code>src/app/marketplace/page.tsx</code>).</li>
+<li>Dashboard shows trust score /100, verified flag, balance, frozen funds, order/transaction history (<code>src/app/dashboard/page.tsx</code>).</li>
+<li>Portal API targets external platform <code>https://api.atelai.org</code> and calls <code>/registry/v1/*</code>, <code>/trade/v1/*</code>, <code>/account/v1/*</code> (<code>src/lib/api.ts</code>).</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">SDK architecture/maturity</h3><a id="user-content-sdk-architecturematurity" class="anchor" aria-label="Permalink: SDK architecture/maturity" href="#sdk-architecturematurity"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>README frames SDK as “Agent Trust &amp; Economics Layer” with identity, consent/policy, proofs, traces, score, graph, anchoring (README lines 3-6).</li>
+<li>README still says 13 modules + 241 tests + Phase 0.5 not complete (README lines 43-72, 205-210).</li>
+<li>
+<code>src/index.ts</code> exports 23 modules including trust, trust-sync, orchestrator, network/envelope/handshake/executor/auditor.</li>
+<li>Actual top-level module dirs in <code>src/</code>: 24; test files in <code>tests/</code>: 24 (counts via shell).</li>
+<li>Potential consistency risk: README says MIT, but package.json <code>license</code> is <code>UNLICENSED</code> and version is 0.8.13.</li>
+<li>Protocol spec is very broad and detailed, status Draft v1.0 dated 2026-02-15.</li>
+<li>Protocol section 14 defines commercial transaction model: auto-escrow on accept, proof-enforced completion, 10-min auto-settlement window, commission schedule, marketplace endpoint (<code>docs/protocol-specification.md</code> lines 1672+).</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Live API snapshot (2026-03-11)</h3><a id="user-content-live-api-snapshot-2026-03-11" class="anchor" aria-label="Permalink: Live API snapshot (2026-03-11)" href="#live-api-snapshot-2026-03-11"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<code>/health</code>: service=atel-platform v2.0.0, agents=178, orders=150, gateways manual + crypto_solana/base/bsc.</li>
+<li>
+<code>/registry/v1/stats</code>: totalAgents=178, verifiedAgents=3, onlineAgents=3.</li>
+<li>
+<code>/trade/v1/offers</code>: count=4 active offers (mostly small USD offers, low completions).</li>
+<li>
+<code>/trade/v1/marketplace</code>: count=5 listed orders (many appear test-like / low commercial volume).</li>
+<li>Signal: platform live but early liquidity + low verified agent ratio.</li>
+</ul>
+<div class="markdown-heading"><h2 class="heading-element">External market / competitor facts</h2><a id="user-content-external-market--competitor-facts" class="anchor" aria-label="Permalink: External market / competitor facts" href="#external-market--competitor-facts"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">Direct or near-direct (agent trust + commerce + identity)</h3><a id="user-content-direct-or-near-direct-agent-trust--commerce--identity" class="anchor" aria-label="Permalink: Direct or near-direct (agent trust + commerce + identity)" href="#direct-or-near-direct-agent-trust--commerce--identity"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<strong>Olas</strong>: positions Pearl as “AI Agent App Store”, Mech as decentralized “AI Agent Bazaar”; OLAS token coordinates economics. Olas Stack docs highlight marketplace resources + open-autonomy framework + on-chain protocol.</li>
+<li>
+<strong>Skyfire</strong>: explicit “agentic commerce platform”; KYA identity + payment tokens (kya/pay/kya+pay); buyer/seller agent accounts, wallets, seller service registration, token-based auth/payment claims.</li>
+<li>
+<strong>Fetch.ai / Agentverse</strong>: positions as platform for personal AI + brand agents; claims open directory marketplace with “2.7 million agents”.</li>
+<li>
+<strong>Nevermined</strong>: positions as “PayPal for AI Commerce”; AI payments infrastructure, AI-to-AI payments/subscriptions, usage metering, dynamic pricing, no-code checkout, developer APIs.</li>
+<li>
+<strong>Bittensor</strong>: open-source subnet economy with miners/validators/subnet creators/stakers and token emissions for contribution quality.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">AI governance / policy / risk platforms (adjacent)</h3><a id="user-content-ai-governance--policy--risk-platforms-adjacent" class="anchor" aria-label="Permalink: AI governance / policy / risk platforms (adjacent)" href="#ai-governance--policy--risk-platforms-adjacent"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<strong>Credo AI</strong>: governance-focused; policy, controls, assessments, governance workflows; emphasizes enterprise compliance and model inventory.</li>
+<li>
+<strong>Fiddler AI</strong>: Model performance + LLM observability + governance and responsible AI posture.</li>
+<li>
+<strong>Lakera</strong>: AI-native security platform focused on prompt injection/jailbreak/data leakage with policy controls and low-latency runtime defenses.</li>
+<li>
+<strong>HiddenLayer</strong>: full lifecycle AI security incl. model scanning, red teaming, AI guardrails, agentic/MCP protection.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Observability / audit / tracing substitutes</h3><a id="user-content-observability--audit--tracing-substitutes" class="anchor" aria-label="Permalink: Observability / audit / tracing substitutes" href="#observability--audit--tracing-substitutes"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<strong>LangSmith (LangChain)</strong>: tracing, evaluation, debugging, monitoring for LLM/agent apps.</li>
+<li>
+<strong>Arize Phoenix</strong>: open-source AI observability and eval stack.</li>
+<li>
+<strong>Langfuse</strong>: open-source LLM engineering platform for traces, evals, prompt mgmt.</li>
+<li>
+<strong>W&amp;B Weave</strong>: traces, evaluations, monitoring, guardrails for agentic systems.</li>
+<li>
+<strong>Helicone</strong>: AI gateway + observability (appears acquired/joined Mintlify messaging).</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Workflow/orchestration substitutes</h3><a id="user-content-workfloworchestration-substitutes" class="anchor" aria-label="Permalink: Workflow/orchestration substitutes" href="#workfloworchestration-substitutes"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<strong>LangGraph</strong>: framework for controllable/durable agent workflows.</li>
+<li>
+<strong>Microsoft AutoGen</strong>: framework + Studio for multi-agent systems.</li>
+<li>
+<strong>Temporal</strong>: durable execution for long-running, failure-tolerant workflows (incl AI/agents use cases).</li>
+<li>
+<strong>UiPath / Workato / Zapier Agents</strong>: enterprise automation incumbents moving into agentic workflows with governance and connector distribution.</li>
+</ul>
+<div class="markdown-heading"><h3 class="heading-element">Verifiable execution / provenance building blocks</h3><a id="user-content-verifiable-execution--provenance-building-blocks" class="anchor" aria-label="Permalink: Verifiable execution / provenance building blocks" href="#verifiable-execution--provenance-building-blocks"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>
+<strong>RISC Zero</strong>: zkVM proving stack for verifiable computation.</li>
+<li>
+<strong>Succinct</strong>: proving infrastructure for verifiable apps.</li>
+<li>
+<strong>OpenTelemetry / OpenLineage / OpenInference</strong>: open standards and open-source libraries for tracing/provenance in ML/AI pipelines.</li>
+</ul>
+<div class="markdown-heading"><h2 class="heading-element">Early interpretation</h2><a id="user-content-early-interpretation" class="anchor" aria-label="Permalink: Early interpretation" href="#early-interpretation"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ul>
+<li>ATEL appears to sit at intersection of: (a) agent identity + trust primitives, (b) verifiable execution/provenance, and (c) agent commerce settlement.</li>
+<li>Distinctive if ATEL can tightly integrate trust proofs + market settlement + practical SDK ergonomics.</li>
+<li>Biggest current risk from evidence: early-stage network effects (few verified/online agents), possible positioning drift (spec broad vs live market depth), and potential trust in consistency/credibility (metrics/version/licensing inconsistencies).</li>
+</ul>
+</div></body></html>
